@@ -1,7 +1,7 @@
 package scm
 
 import (
-	"github.com/jtuttle/dev-flow/common"
+	"github.com/conjurinc/dev-flow/common"
 )
 
 type SourceControlManagement interface {

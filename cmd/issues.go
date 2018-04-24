@@ -6,7 +6,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/jtuttle/dev-flow/issuetracking"
+	"github.com/conjurinc/dev-flow/issuetracking"
 )
 
 var issuesCmd = &cobra.Command{

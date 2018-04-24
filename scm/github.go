@@ -6,9 +6,9 @@ import (
 
 	"github.com/google/go-github/github"
 	
-	"github.com/jtuttle/dev-flow/common"
-	"github.com/jtuttle/dev-flow/services"
-	"github.com/jtuttle/dev-flow/versioncontrol"
+	"github.com/conjurinc/dev-flow/common"
+	"github.com/conjurinc/dev-flow/services"
+	"github.com/conjurinc/dev-flow/versioncontrol"
 )
 
 type GitHub struct { }
@@ -25,7 +25,7 @@ func (gh GitHub) GetPullRequest(branchName string) *PullRequest {
 	opts := &github.PullRequestListOptions {
 		State: "open",
 		Base: "master",
-		Head: fmt.Sprintf("jtuttle:%v", branchName),
+		Head: fmt.Sprintf("conjurinc:%v", branchName),
 	}
 
 	ghprs, _, err := client.PullRequests.List( 

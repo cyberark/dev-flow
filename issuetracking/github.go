@@ -6,9 +6,9 @@ import (
 	
 	"github.com/google/go-github/github"
 
-	"github.com/jtuttle/dev-flow/common"
-	"github.com/jtuttle/dev-flow/services"
-	"github.com/jtuttle/dev-flow/versioncontrol"
+	"github.com/conjurinc/dev-flow/common"
+	"github.com/conjurinc/dev-flow/services"
+	"github.com/conjurinc/dev-flow/versioncontrol"
 )
 
 type GitHub struct { }

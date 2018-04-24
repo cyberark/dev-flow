@@ -6,9 +6,9 @@ import (
 	
 	"github.com/spf13/cobra"
 
-	"github.com/jtuttle/dev-flow/scm"
-	"github.com/jtuttle/dev-flow/util"
-	"github.com/jtuttle/dev-flow/versioncontrol"
+	"github.com/conjurinc/dev-flow/scm"
+	"github.com/conjurinc/dev-flow/util"
+	"github.com/conjurinc/dev-flow/versioncontrol"
 )
 
 // completeCmd represents the complete command

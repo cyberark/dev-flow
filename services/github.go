@@ -8,7 +8,7 @@ import (
 	
 	"github.com/google/go-github/github"
 
-	"github.com/jtuttle/dev-flow/common"
+	"github.com/conjurinc/dev-flow/common"
 )
 
 type GitHub struct { }

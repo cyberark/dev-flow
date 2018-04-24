@@ -3,7 +3,7 @@ package issuetracking
 import (
 	"strings"
 
-	"github.com/jtuttle/dev-flow/common"
+	"github.com/conjurinc/dev-flow/common"
 )
 
 type IssueTracking interface {
