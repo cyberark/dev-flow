@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"fmt"
-	
+
 	"github.com/spf13/cobra"
 	
 	"github.com/conjurinc/dev-flow/issuetracking"
@@ -11,9 +11,9 @@ import (
 	"github.com/conjurinc/dev-flow/versioncontrol"
 )
 
-// prCmd represents the pr command
-var prCmd = &cobra.Command{
-	Use:   "pr",
+var pullrequestCmd = &cobra.Command{
+	Use:   "pullrequest",
+	Aliases: []string { "pr" },
 	Short: "Creates a pull request for your branch.",
 	Run: func(cmd *cobra.Command, args []string) {
 		vc := versioncontrol.GetClient()
@@ -31,22 +31,12 @@ var prCmd = &cobra.Command{
 			pr = scm.CreatePullRequest(issue)
 		}
 
-		if util.Confirm("Open pull request?") {
+		if util.Confirm("Open pull request in browser?") {
 			util.Openbrowser(pr.URL)	
 		}
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(prCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// prCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// prCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	rootCmd.AddCommand(pullrequestCmd)
 }

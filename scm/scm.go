@@ -20,7 +20,8 @@ func GetClient() SourceControlManagement {
 
 type PullRequest struct {
 	Number int
-	URL string
+	Creator string
 	Base string
 	Mergeable bool
+	URL string
 }

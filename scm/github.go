@@ -25,7 +25,7 @@ func (gh GitHub) GetPullRequest(branchName string) *PullRequest {
 	opts := &github.PullRequestListOptions {
 		State: "open",
 		Base: "master",
-		Head: fmt.Sprintf("conjurinc:%v", branchName),
+		Head: fmt.Sprintf("%v:%v", repo.Owner, branchName),
 	}
 
 	ghprs, _, err := client.PullRequests.List( 
@@ -121,8 +121,9 @@ func (gh GitHub) MergePullRequest(pr *PullRequest) bool {
 func (gh GitHub) toCommonPullRequest(ghpr *github.PullRequest) *PullRequest {
 	return &PullRequest {
 		Number: *ghpr.Number,
-		URL: *ghpr.HTMLURL,
+		Creator: *ghpr.User.Login,
 		Base: *ghpr.Base.Ref,
 		Mergeable: *ghpr.Mergeable,
+		URL: *ghpr.HTMLURL,
 	}
 }
