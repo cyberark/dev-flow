@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"fmt"
+	
 	"github.com/spf13/cobra"
 
 	"github.com/conjurinc/dev-flow/chat"
@@ -26,10 +28,10 @@ var reviseCmd = &cobra.Command{
 		issue := it.Issue(issueKey)
 		it.AssignIssue(issue, pr.Creator)
 
-		// Notify user in Slack?
-
+		message := fmt.Sprintf("%v has finished reviewing %v", it.GetCurrentUser(), pr.URL)
+		
 		chat := chat.GetClient()
-		chat.DirectMessage("jtuttle", "hiya")
+		chat.DirectMessage(pr.Creator, message)
 	},
 }
 
