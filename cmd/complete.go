@@ -6,6 +6,7 @@ import (
 	
 	"github.com/spf13/cobra"
 
+	"github.com/conjurinc/dev-flow/issuetracking"
 	"github.com/conjurinc/dev-flow/scm"
 	"github.com/conjurinc/dev-flow/util"
 	"github.com/conjurinc/dev-flow/versioncontrol"
@@ -40,11 +41,16 @@ var completeCmd = &cobra.Command{
 		success := scm.MergePullRequest(pr)
 
 		if success {
-			fmt.Println("Merged %v into %v", branchName, pr.Base)
+			fmt.Printf("Merged %v into %v", branchName, pr.Base)
 		} else {
 			fmt.Println("Merge failed.")
 			os.Exit(1)
 		}
+
+		it := issuetracking.GetClient()
+		issueKey := issuetracking.GetIssueKeyFromBranchName(branchName)
+		issue := it.Issue(issueKey)
+		it.AssignIssue(issue, pr.Creator)
 
 		vc.CheckoutAndPull(pr.Base)
 
@@ -57,8 +63,6 @@ var completeCmd = &cobra.Command{
 			vc.DeleteLocalBranch(branchName)
 			fmt.Println("Local branch deleted.")
 		}
-
-		// assign and close issue
 	},
 }
 

@@ -74,11 +74,13 @@ func (gh GitHub) CreatePullRequest(issue common.Issue) *PullRequest {
 	
 	base := "master"
 	head := issue.BranchName()
+	body := fmt.Sprintf("Closes #%v", *issue.Number)
 	
 	ghnpr := &github.NewPullRequest {
-		Title: issue.Title,
 		Base: &base,
 		Head: &head,
+		Title: issue.Title,
+		Body: &body,
 	}
 
 	client := gh.client()
