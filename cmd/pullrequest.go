@@ -16,9 +16,7 @@ var pullrequestCmd = &cobra.Command{
 	Aliases: []string { "pr" },
 	Short: "Creates a pull request for your branch.",
 	Run: func(cmd *cobra.Command, args []string) {
-		vc := versioncontrol.GetClient()
-		branchName := vc.CurrentBranch()
-		issueKey := issuetracking.GetIssueKeyFromBranchName(branchName)
+		branchName := versioncontrol.GetClient().CurrentBranch()
 
 		scm := scm.GetClient()
 		pr := scm.GetPullRequest(branchName)
@@ -26,8 +24,8 @@ var pullrequestCmd = &cobra.Command{
 		if pr != nil {
 			fmt.Println("Pull request already exists for branch", branchName)
 		} else {
-			it := issuetracking.GetClient()
-			issue := it.Issue(issueKey)
+			issueKey := issuetracking.GetIssueKeyFromBranchName(branchName)
+			issue := issuetracking.GetClient().Issue(issueKey)
 			pr = scm.CreatePullRequest(issue)
 		}
 
