@@ -121,11 +121,17 @@ func (gh GitHub) MergePullRequest(pr *PullRequest) bool {
 }
 
 func (gh GitHub) toCommonPullRequest(ghpr *github.PullRequest) *PullRequest {
+	mergeable := false
+
+	if ghpr.Mergeable != nil {
+		mergeable = *ghpr.Mergeable
+	}
+	
 	return &PullRequest {
 		Number: *ghpr.Number,
 		Creator: *ghpr.User.Login,
 		Base: *ghpr.Base.Ref,
-		Mergeable: *ghpr.Mergeable,
+		Mergeable: mergeable,
 		URL: *ghpr.HTMLURL,
 	}
 }
