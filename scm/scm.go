@@ -4,7 +4,7 @@ import (
 	"github.com/conjurinc/dev-flow/common"
 )
 
-type SourceControlManagement interface {
+type SourceControlManagementClient interface {
 	GetPullRequest(string) *PullRequest
 	CreatePullRequest(common.Issue) *PullRequest
 	MergePullRequest(*PullRequest) bool
@@ -14,8 +14,8 @@ func (pr PullRequest) String() string {
 	return pr.URL
 }
 
-func GetClient() SourceControlManagement {
-	return GitHub { }
+func GetClient() SourceControlManagementClient {
+	return GitHub{}
 }
 
 type PullRequest struct {

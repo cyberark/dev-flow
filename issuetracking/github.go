@@ -11,10 +11,10 @@ import (
 	"github.com/conjurinc/dev-flow/versioncontrol"
 )
 
-type GitHub struct { }
+type GitHub struct{}
 
 func (gh GitHub) client() *github.Client {
-	return services.GitHub { }.GetClient()
+	return services.GitHub{}.GetClient()
 }
 
 func (gh GitHub) GetCurrentUser() string {
@@ -29,7 +29,7 @@ func (gh GitHub) GetCurrentUser() string {
 }
 
 func (gh GitHub) Issues() []common.Issue {
-	repo := versioncontrol.Git { }.Repo()
+	repo := versioncontrol.Git{}.Repo()
 
 	ghIssues, _, err := gh.client().Issues.ListByRepo(
 		context.Background(),
@@ -45,14 +45,14 @@ func (gh GitHub) Issues() []common.Issue {
 	issues := make([]common.Issue, len(ghIssues))
 
 	for i, ghIssue := range ghIssues {
-		issues[i] = services.GitHub { }.ToCommonIssue(ghIssue)
+		issues[i] = services.GitHub{}.ToCommonIssue(ghIssue)
 	}
 
 	return issues
 }
 
 func (gh GitHub) Issue(issueKey string) common.Issue {
-	repo := versioncontrol.Git { }.Repo()
+	repo := versioncontrol.Git{}.Repo()
 	
 	client := gh.client()
 
@@ -73,11 +73,11 @@ func (gh GitHub) Issue(issueKey string) common.Issue {
 		panic(err)
 	}
 
-	return services.GitHub { }.ToCommonIssue(ghIssue)
+	return services.GitHub{}.ToCommonIssue(ghIssue)
 }
 
 func (gh GitHub) AssignIssue(issue common.Issue, login string) {
-	repo := versioncontrol.Git { }.Repo()
+	repo := versioncontrol.Git{}.Repo()
 	
 	client := gh.client()
 

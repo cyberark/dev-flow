@@ -11,7 +11,7 @@ import (
 	"github.com/conjurinc/dev-flow/common"
 )
 
-type GitHub struct { }
+type GitHub struct{}
 
 func (gh GitHub) GetClient() *github.Client {
 	ts := oauth2.StaticTokenSource(

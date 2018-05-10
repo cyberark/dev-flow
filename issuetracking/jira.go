@@ -1,3 +1,3 @@
 package issuetracking
 
-type Jira struct { }
+type Jira struct{}

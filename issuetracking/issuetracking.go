@@ -6,15 +6,15 @@ import (
 	"github.com/conjurinc/dev-flow/common"
 )
 
-type IssueTracking interface {
+type IssueTrackingClient interface {
 	GetCurrentUser() string
 	Issues() []common.Issue
 	Issue(string) common.Issue
 	AssignIssue(common.Issue, string)
 }
 
-func GetClient() IssueTracking {
-	return GitHub { }
+func GetClient() IssueTrackingClient {
+	return GitHub{}
 }
 
 func GetIssueKeyFromBranchName(branchName string) string {

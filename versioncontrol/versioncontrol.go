@@ -1,6 +1,6 @@
 package versioncontrol
 
-type VersionControl interface {
+type VersionControlClient interface {
 	Repo() Repo
 	CurrentBranch() string
 	Pull()
@@ -11,8 +11,8 @@ type VersionControl interface {
 	DeleteLocalBranch(string)
 }
 
-func GetClient() VersionControl {
-	return Git { }
+func GetClient() VersionControlClient {
+	return Git{}
 }
 
 type Repo struct {

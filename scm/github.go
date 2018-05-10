@@ -11,10 +11,10 @@ import (
 	"github.com/conjurinc/dev-flow/versioncontrol"
 )
 
-type GitHub struct { }
+type GitHub struct{}
 
 func (gh GitHub) client() *github.Client {
-	return services.GitHub { }.GetClient()
+	return services.GitHub{}.GetClient()
 }
 
 func (gh GitHub) GetPullRequest(branchName string) *PullRequest {
