@@ -103,6 +103,10 @@ func (gh GitHub) MergePullRequest(pr *PullRequest) bool {
 	repo := versioncontrol.GetClient().Repo()
 	
 	client := gh.client()
+
+	prOpt := &github.PullRequestOptions {
+		MergeMethod: "squash",
+	}
 	
 	ghmr, _, err := client.PullRequests.Merge(
 		context.Background(),
@@ -110,7 +114,7 @@ func (gh GitHub) MergePullRequest(pr *PullRequest) bool {
 		repo.Name,
 		pr.Number,
 		"",
-		nil,
+		prOpt,
 	)
 
 	if err != nil {
