@@ -4,7 +4,11 @@ The dev-flow CLI is a tool for standardizing and automating common development t
 
 ## Setup
 
+### Install Golang
+
 If you haven't already, follow the Go [installation instructions](https://golang.org/doc/install#install).
+
+### Install dev-flow
 
 Install `dev-flow` like so:
 
@@ -14,30 +18,45 @@ cd $GOPATH/src/github.com/conjurinc/dev-flow
 go install
 ```
 
-If you don't have one already, you will need a [GitHub access token](https://help.github.com/articles/creating-a-personal-access-token-for-the-command-line/) for your account to interact with GitHub via command line.
+### Provide a GitHub Access Token
 
-If you wish to notify users when their attention is required on a pull request, you can also provide an API token for a [Slack bot](https://my.slack.com/apps/A0F7YS25R-bots).
+`dev-flow` makes heavy use of GitHub and requires that a GitHub access token be
+provided in the `GITHUB_ACCESS_TOKEN` environment variable. The following setup
+describes one way to provide this token securely using the OSX keychain.
 
-Once you have obtained these tokens, place them in a `~/.dev-flow` file:
+1. Create a [GitHub access token](https://help.github.com/articles/creating-a-personal-access-token-for-the-command-line/)
+if you haven't already.
+
+1. Install [Summon](https://github.com/cyberark/summon) and the [summon-keyring](https://github.com/conjurinc/summon-keyring) provider.
+
+1. Store the GitHub access token in your OSX keychain:
 
 ```
-github:
-  access_token: [github-access-token]
-  
-slack:
-  api_token: [slack-bot-api-token]
+$ security add-generic-password -s "summon" -a "github/access_token" -w "insert-token-here"
+```
+
+1. Create a `secrets.yml` file in the root of the GitHub project with which you wish to use `dev-flow`:
+
+```
+GITHUB_ACCESS_TOKEN: !var github/access_token
+```
+
+1. Create an alias to run `dev-flow` with Summon:
+
+```
+alias df='summon -p keyring.py dev-flow'
 ```
 
 ## Usage
 
 Once `dev-flow` is installed, the following commands can be run from the root directory of a source-controlled project:
 
-`wf issues`: list open issues.
-`wf start`: create a branch for an issue, perform an initial commit, and assign the issue to the current user.
-`wf pr`: create a pull request for the current branch into `master`.
-`wf cr [username]`: create a pull request for the current branch into `master` and assign the associated issue to a specified user.
-`wf revise`: reject a pull request and assign the associated issue back to the pull request creator.
-`wf complete`: merge pull request and (optionally) delete the remote and local branches.
+`issues`: list open issues.
+`start`: create a branch for an issue, perform an initial commit, and assign the issue to the current user.
+`pr`: create a pull request for the current branch into `master`.
+`cr [username]`: create a pull request for the current branch into `master` and assign the associated issue to a specified user.
+`revise`: reject a pull request and assign the associated issue back to the pull request creator.
+`complete`: merge pull request and (optionally) delete the remote and local branches.
 
 ## Sample Workflow
 
