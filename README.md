@@ -31,21 +31,21 @@ if you haven't already.
 
 1. Store the GitHub access token in your OSX keychain:
 
-```
-$ security add-generic-password -s "summon" -a "github/access_token" -w "insert-token-here"
-```
+    ```
+    $ security add-generic-password -s "summon" -a "github/access_token" -w "insert-token-here"
+    ```
 
 1. Create a `secrets.yml` file in the root of the GitHub project with which you wish to use `dev-flow`:
 
-```
-GITHUB_ACCESS_TOKEN: !var github/access_token
-```
+    ```
+    GITHUB_ACCESS_TOKEN: !var github/access_token
+    ```
 
 1. Create an alias to run `dev-flow` with Summon:
 
-```
-alias df='summon -p keyring.py dev-flow'
-```
+    ```
+    alias df='summon -p keyring.py dev-flow'
+    ```
 
 ## Usage
 
