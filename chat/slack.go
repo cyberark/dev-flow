@@ -9,7 +9,7 @@ import (
 type Slack struct{}
 
 func (s Slack) client() *slack.Client {
-	return slack.New(viper.Get("slack_api_token").(string))
+	return slack.New(viper.Get("slack.api_token").(string))
 }
 
 func (s Slack) getUserID(username string) (string) {

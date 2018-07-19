@@ -15,7 +15,7 @@ type GitHub struct{}
 
 func (gh GitHub) GetClient() *github.Client {
 	ts := oauth2.StaticTokenSource(
-		&oauth2.Token{ AccessToken: viper.Get("github_access_token").(string) },
+		&oauth2.Token{ AccessToken: viper.Get("github.access_token").(string) },
 	)
 	tc := oauth2.NewClient(context.Background(), ts)
 	

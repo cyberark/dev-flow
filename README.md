@@ -21,8 +21,11 @@ If you wish to notify users when their attention is required on a pull request, 
 Once you have obtained these tokens, place them in a `~/.dev-flow` file:
 
 ```
-github_access_token: [github-access-token]
-slack_api_token: [slack-bot-api-token]
+github:
+  access_token: [github-access-token]
+  
+slack:
+  api_token: [slack-bot-api-token]
 ```
 
 ## Usage
