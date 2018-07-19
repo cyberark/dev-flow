@@ -1,7 +1,7 @@
 package chat
 
 import (
-	"github.com/spf13/viper"
+	"os"
 	
 	"github.com/nlopes/slack"
 )
@@ -9,7 +9,7 @@ import (
 type Slack struct{}
 
 func (s Slack) client() *slack.Client {
-	return slack.New(viper.Get("slack.api_token").(string))
+	return slack.New(os.Getenv("SLACK_API_TOKEN"))
 }
 
 func (s Slack) getUserID(username string) (string) {

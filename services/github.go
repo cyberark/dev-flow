@@ -2,10 +2,9 @@ package services
 
 import (
 	"context"
+	"os"
 	"golang.org/x/oauth2"
 
-	"github.com/spf13/viper"
-	
 	"github.com/google/go-github/github"
 
 	"github.com/conjurinc/dev-flow/common"
@@ -14,8 +13,10 @@ import (
 type GitHub struct{}
 
 func (gh GitHub) GetClient() *github.Client {
+
+	
 	ts := oauth2.StaticTokenSource(
-		&oauth2.Token{ AccessToken: viper.Get("github.access_token").(string) },
+		&oauth2.Token{ AccessToken: os.Getenv("GITHUB_ACCESS_TOKEN") },
 	)
 	tc := oauth2.NewClient(context.Background(), ts)
 	
