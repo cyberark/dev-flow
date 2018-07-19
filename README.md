@@ -52,11 +52,11 @@ if you haven't already.
 Once `dev-flow` is installed, the following commands can be run from the root directory of a source-controlled project:
 
 - `issues`: list open issues.
-- `start`: create a branch for an issue, perform an initial commit, and assign the issue to the current user.
-- `pr`: create a pull request for the current branch into `master`.
-- `cr [username]`: create a pull request for the current branch into `master` and assign the associated issue to a specified user.
-- `revise`: reject a pull request and assign the associated issue back to the pull request creator.
-- `complete`: merge pull request and (optionally) delete the remote and local branches.
+- `start [issue-num]`: create branch, perform initial commit, and assign issue to self.
+- `pullrequest`: create pull request for current branch into `master`.
+- `codereview [username]`: create pull request into `master` and assign issue to user.
+- `revise`: reject pull request and assign issue back to pull request creator.
+- `complete`: merge pull request and (optionally) delete remote and local branches.
 
 ## Sample Workflow
 
