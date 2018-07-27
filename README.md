@@ -35,7 +35,7 @@ if you haven't already.
     $ security add-generic-password -s "summon" -a "github/access_token" -w "insert-token-here"
     ```
 
-1. Create a `secrets.yml` file in the root of the GitHub project with which you wish to use `dev-flow`:
+1. Create `~/.df-secrets.yml` to store a reference to your token:
 
     ```
     GITHUB_ACCESS_TOKEN: !var github/access_token
@@ -44,8 +44,11 @@ if you haven't already.
 1. Create an alias to run `dev-flow` with Summon:
 
     ```
-    alias df='summon -p keyring.py dev-flow'
+    alias df='summon -p keyring.py -f ~/.df-secrets.yml dev-flow'
     ```
+
+That's it! You should now be able to use that alias to run `dev-flow` with the
+secrets it needs.
 
 ## Usage
 
@@ -53,8 +56,8 @@ Once `dev-flow` is installed, the following commands can be run from the root di
 
 - `issues`: list open issues.
 - `start [issue-num]`: create branch, perform initial commit, and assign issue to self.
-- `pullrequest`: create pull request for current branch into `master`.
-- `codereview [username]`: create pull request into `master` and assign issue to user.
+- `pullrequest` (`pr`): create pull request for current branch into `master`.
+- `codereview [username]` (`cr`): create pull request into `master` and assign issue to user.
 - `revise`: reject pull request and assign issue back to pull request creator.
 - `complete`: merge pull request and (optionally) delete remote and local branches.
 
