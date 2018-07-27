@@ -33,7 +33,7 @@ var reviseCmd = &cobra.Command{
 		if chat != nil {
 			chat.DirectMessage(
 				pr.Creator,
-				fmt.Sprintf("%v has finished reviewing %v", it.GetCurrentUser(), pr.URL),
+				fmt.Sprintf("%v has requested changes on %v", it.GetCurrentUser(), pr.URL),
 			)
 		}
 	},
