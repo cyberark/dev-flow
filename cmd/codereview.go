@@ -53,10 +53,13 @@ var codereviewCmd = &cobra.Command{
 		it.AssignIssue(issue, reviewer)
 
 		chat := chat.GetClient()
-		chat.DirectMessage(
-			reviewer,
-			fmt.Sprintf("%v has assigned you as reviewer on %v", it.GetCurrentUser(), pr.URL),
-		)
+
+		if chat != nil {
+			chat.DirectMessage(
+				reviewer,
+				fmt.Sprintf("%v has requested your review on %v", it.GetCurrentUser(), pr.URL),
+			)
+		}
 		
 		if util.Confirm("Open pull request in browser?") {
 			util.Openbrowser(pr.URL)	

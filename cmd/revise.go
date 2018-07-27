@@ -29,10 +29,13 @@ var reviseCmd = &cobra.Command{
 		it.AssignIssue(issue, pr.Creator)
 
 		chat := chat.GetClient()
-		chat.DirectMessage(
-			pr.Creator,
-			fmt.Sprintf("%v has finished reviewing %v", it.GetCurrentUser(), pr.URL),
-		)
+
+		if chat != nil {
+			chat.DirectMessage(
+				pr.Creator,
+				fmt.Sprintf("%v has finished reviewing %v", it.GetCurrentUser(), pr.URL),
+			)
+		}
 	},
 }
 

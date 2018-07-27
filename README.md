@@ -50,7 +50,15 @@ if you haven't already.
 That's it! You should now be able to use that alias to run `dev-flow` with the
 secrets it needs.
 
-### Configure labels
+### Configure Slack Bot Notifications
+
+`dev-flow` can be configured to deliver notifications via Slack bot to users
+involved with an issue when the state of an issue changes. To enable these
+notifications, you must provide the API token for a bot in the `SLACK_API_TOKEN`
+environment variable. It is recommeneded that you follow the GitHub access token
+instructions above to provide the Slack API token in a secure manner.
+
+### Configure Labels
 
 `dev-flow` can apply labels during the lifecycle of a story. You can provide the
 names of these labels by creating `~/.df-config.yml` like so:
