@@ -28,17 +28,25 @@ var codereviewCmd = &cobra.Command{
 		issueKey := issuetracking.GetIssueKeyFromBranchName(branchName)
 		issue := it.Issue(issueKey)
 
-		labelName := viper.Get("labels.in_review")
+		progressLabelName := viper.Get("labels.in_progress")
 
-		if labelName != nil {
-			err := it.LabelIssue(issue, labelName.(string))
+		if progressLabelName != nil {
+			it.RemoveIssueLabel(issue, progressLabelName.(string))
+
+			fmt.Println(fmt.Sprintf("Removed label '%v' from issue %v.", progressLabelName, *issue.Number))
+		}
+		
+		reviewLabelName := viper.Get("labels.in_review")
+
+		if reviewLabelName != nil {
+			err := it.AddIssueLabel(issue, reviewLabelName.(string))
 
 			if err != nil {
 				fmt.Println(err)
 				os.Exit(1)
 			}
 		
-			fmt.Println(fmt.Sprintf("Added label '%v' to issue %v.", labelName, *issue.Number))
+			fmt.Println(fmt.Sprintf("Added label '%v' to issue %v.", reviewLabelName, *issue.Number))
 		}
 		
 		scm := scm.GetClient()

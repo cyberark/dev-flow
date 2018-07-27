@@ -99,7 +99,7 @@ func (gh GitHub) AssignIssue(issue common.Issue, login string) {
 	}
 }
 
-func (gh GitHub) LabelIssue(issue common.Issue, labelName string) error {
+func (gh GitHub) AddIssueLabel(issue common.Issue, labelName string) error {
 	repo := versioncontrol.Git{}.Repo()
 
 	client := gh.client()
@@ -125,6 +125,24 @@ func (gh GitHub) LabelIssue(issue common.Issue, labelName string) error {
 	}
 
 	return nil
+}
+
+func (gh GitHub) RemoveIssueLabel(issue common.Issue, labelName string) {
+	repo := versioncontrol.Git{}.Repo()
+
+	client := gh.client()
+
+	_, err := client.Issues.RemoveLabelForIssue(
+		context.Background(),
+		repo.Owner,
+		repo.Name,
+		*issue.Number,
+		labelName,
+	)
+
+	if err != nil {
+		panic(err)
+	}
 }
 
 func (gh GitHub) getLabel(name string) (*github.Label, error) {

@@ -5,6 +5,7 @@ import (
 	"os"
 	
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 
 	"github.com/conjurinc/dev-flow/issuetracking"
 	"github.com/conjurinc/dev-flow/scm"
@@ -40,17 +41,26 @@ var completeCmd = &cobra.Command{
 
 		success := scm.MergePullRequest(pr)
 
+		it := issuetracking.GetClient()
+		issueKey := issuetracking.GetIssueKeyFromBranchName(branchName)
+		issue := it.Issue(issueKey)
+
 		if success {
-			fmt.Printf("Merged %v into %v", branchName, pr.Base)
+			fmt.Println(fmt.Sprintf("Merged %v into %v", branchName, pr.Base))
 		} else {
 			fmt.Println("Merge failed.")
 			os.Exit(1)
 		}
 
-		it := issuetracking.GetClient()
-		issueKey := issuetracking.GetIssueKeyFromBranchName(branchName)
-		issue := it.Issue(issueKey)
 		it.AssignIssue(issue, pr.Creator)
+
+		reviewLabelName := viper.Get("labels.in_review")
+		
+		if reviewLabelName != nil {
+			it.RemoveIssueLabel(issue, reviewLabelName.(string))
+
+			fmt.Println(fmt.Sprintf("Removed label '%v' from issue %v.", reviewLabelName, *issue.Number))
+		}
 
 		vc.CheckoutAndPull(pr.Base)
 
