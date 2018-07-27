@@ -12,11 +12,11 @@ import (
 	"github.com/conjurinc/dev-flow/versioncontrol"
 )
 
-// completeCmd represents the complete command
 var completeCmd = &cobra.Command{
 	Use:   "complete",
 	Short: "Merges the story branch and completes the issue.",
 	Run: func(cmd *cobra.Command, args []string) {
+
 		vc := versioncontrol.GetClient()
 		branchName := vc.CurrentBranch()
 
@@ -58,7 +58,7 @@ var completeCmd = &cobra.Command{
 			vc.DeleteRemoteBranch(branchName)
 			fmt.Println("Remote branch deleted.")
 		}
-
+		
 		if util.Confirm(fmt.Sprintf("Delete local branch %v", branchName)) {
 			vc.DeleteLocalBranch(branchName)
 			fmt.Println("Local branch deleted.")

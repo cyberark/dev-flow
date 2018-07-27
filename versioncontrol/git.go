@@ -80,6 +80,6 @@ func (git Git) DeleteRemoteBranch(branchName string) {
 }
 
 func (git Git) DeleteLocalBranch(branchName string) {
-	cmd := fmt.Sprintf("git branch -d %v", branchName)
+	cmd := fmt.Sprintf("git branch -D %v", branchName)
 	git.runCommand(cmd, true)
 }
