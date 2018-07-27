@@ -1,9 +1,11 @@
 package cmd
 
 import (
+	"os"
 	"fmt"
 
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 
 	"github.com/conjurinc/dev-flow/chat"
 	"github.com/conjurinc/dev-flow/issuetracking"
@@ -26,6 +28,19 @@ var codereviewCmd = &cobra.Command{
 		issueKey := issuetracking.GetIssueKeyFromBranchName(branchName)
 		issue := it.Issue(issueKey)
 
+		labelName := viper.Get("labels.in_review")
+
+		if labelName != nil {
+			err := it.LabelIssue(issue, labelName.(string))
+
+			if err != nil {
+				fmt.Println(err)
+				os.Exit(1)
+			}
+		
+			fmt.Println(fmt.Sprintf("Added label '%v' to issue %v.", labelName, *issue.Number))
+		}
+		
 		scm := scm.GetClient()
 		pr := scm.GetPullRequest(branchName)
 		

@@ -2,8 +2,10 @@ package cmd
 
 import (
 	"fmt"
+	"os"
 	
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 
 	"github.com/conjurinc/dev-flow/issuetracking"
 	"github.com/conjurinc/dev-flow/versioncontrol"
@@ -18,7 +20,23 @@ var startCmd = &cobra.Command{
 		
 		it := issuetracking.GetClient()
 		issue := it.Issue(issueKey)
-		it.AssignIssue(issue, it.GetCurrentUser())
+
+		user := it.GetCurrentUser()
+		it.AssignIssue(issue, user)
+		fmt.Println(fmt.Sprintf("Assigned issue %v to user %v.", *issue.Number, user))
+
+		labelName := viper.Get("labels.in_progressss")
+
+		if labelName != nil {
+			err := it.LabelIssue(issue, labelName.(string))
+
+			if err != nil {
+				fmt.Println(err)
+				os.Exit(1)
+			}
+		
+			fmt.Println(fmt.Sprintf("Added label '%v' to issue %v.", labelName, *issue.Number))
+		}
 
 		vc := versioncontrol.GetClient()
 		

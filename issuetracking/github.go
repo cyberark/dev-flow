@@ -1,7 +1,9 @@
 package issuetracking
 
 import (
+	"fmt"
 	"context"
+	"errors"
 	"strconv"
 	
 	"github.com/google/go-github/github"
@@ -92,4 +94,51 @@ func (gh GitHub) AssignIssue(issue common.Issue, login string) {
 	if err != nil {
 		panic(err)
 	}
+}
+
+func (gh GitHub) LabelIssue(issue common.Issue, labelName string) error {
+	repo := versioncontrol.Git{}.Repo()
+
+	client := gh.client()
+
+	_, err := gh.getLabel(labelName)
+	
+	if err != nil {
+		return errors.New(fmt.Sprintf("Label '%v' does not exist.", labelName))
+	}
+	
+	labels := []string{labelName}
+	
+	_, _, err = client.Issues.AddLabelsToIssue(
+		context.Background(),
+		repo.Owner,
+		repo.Name,
+		*issue.Number,
+		labels,
+	)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (gh GitHub) getLabel(name string) (*github.Label, error) {
+	repo := versioncontrol.GetClient().Repo()
+	
+	client := gh.client()
+
+	ghl, _, err := client.Issues.GetLabel(
+		context.Background(),
+		repo.Owner,
+		repo.Name,
+		name,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return ghl, nil
 }

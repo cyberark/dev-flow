@@ -50,6 +50,20 @@ if you haven't already.
 That's it! You should now be able to use that alias to run `dev-flow` with the
 secrets it needs.
 
+### Configure labels
+
+`dev-flow` can apply labels during the lifecycle of a story. You can provide the
+names of these labels by creating `~/.df-config.yml` like so:
+
+```
+labels:
+  in_progress: 'in progress'
+  in_review: 'review'
+```
+
+You must create these labels in your issue tracker before using them as
+`dev-flow` will not create them automatically.
+
 ## Usage
 
 Once `dev-flow` is installed, the following commands can be run from the root directory of a source-controlled project:
