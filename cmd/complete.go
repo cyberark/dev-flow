@@ -46,7 +46,7 @@ var completeCmd = &cobra.Command{
 		issue := it.Issue(issueKey)
 
 		if success {
-			fmt.Println(fmt.Sprintf("Merged %v into %v", branchName, pr.Base))
+			fmt.Printf("Merged %v into %v\n", branchName, pr.Base)
 		} else {
 			fmt.Println("Merge failed.")
 			os.Exit(1)
@@ -59,7 +59,7 @@ var completeCmd = &cobra.Command{
 		if reviewLabelName != nil {
 			it.RemoveIssueLabel(issue, reviewLabelName.(string))
 
-			fmt.Println(fmt.Sprintf("Removed label '%v' from issue %v.", reviewLabelName, *issue.Number))
+			fmt.Printf("Removed label '%v' from issue %v.\n", reviewLabelName, *issue.Number)
 		}
 
 		vc.CheckoutAndPull(pr.Base)

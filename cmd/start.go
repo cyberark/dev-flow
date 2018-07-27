@@ -23,7 +23,7 @@ var startCmd = &cobra.Command{
 
 		user := it.GetCurrentUser()
 		it.AssignIssue(issue, user)
-		fmt.Println(fmt.Sprintf("Assigned issue %v to user %v.", *issue.Number, user))
+		fmt.Printf("Assigned issue %v to user %v.\n", *issue.Number, user)
 
 		progressLabelName := viper.Get("labels.in_progress")
 
@@ -35,7 +35,7 @@ var startCmd = &cobra.Command{
 				os.Exit(1)
 			}
 		
-			fmt.Println(fmt.Sprintf("Added label '%v' to issue %v.", progressLabelName, *issue.Number))
+			fmt.Printf("Added label '%v' to issue %v.\n", progressLabelName, *issue.Number)
 		}
 
 		vc := versioncontrol.GetClient()
