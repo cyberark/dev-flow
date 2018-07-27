@@ -44,10 +44,13 @@ func (gh GitHub) Issues() []common.Issue {
 		panic(err)
 	}
 
-	issues := make([]common.Issue, len(ghIssues))
-
-	for i, ghIssue := range ghIssues {
-		issues[i] = services.GitHub{}.ToCommonIssue(ghIssue)
+	var issues []common.Issue
+	
+	for _, ghIssue := range ghIssues {
+		if ghIssue.PullRequestLinks == nil {
+			issue := services.GitHub{}.ToCommonIssue(ghIssue)
+			issues = append(issues, issue)
+		}
 	}
 
 	return issues
