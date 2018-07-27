@@ -33,7 +33,6 @@ var issuesCmd = &cobra.Command{
 				strings.Join(issue.Labels, ", "),
 			)
 		}
-
 	},
 }
 
