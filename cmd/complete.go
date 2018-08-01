@@ -16,8 +16,7 @@ import (
 var completeCmd = &cobra.Command{
 	Use:   "complete",
 	Short: "Merges the story branch and completes the issue.",
-	Run: func(cmd *cobra.Command, args []string) {
-
+	Run: func(cmd *cobra.Command, args []string) {		
 		vc := versioncontrol.GetClient()
 		branchName := vc.CurrentBranch()
 
@@ -54,11 +53,10 @@ var completeCmd = &cobra.Command{
 
 		it.AssignIssue(issue, pr.Creator)
 
-		reviewLabelName := viper.Get("labels.in_review")
+		reviewLabelName := viper.GetString("labels.in_review")
 		
-		if reviewLabelName != nil {
-			it.RemoveIssueLabel(issue, reviewLabelName.(string))
-
+		if reviewLabelName != "" && issue.HasLabel(reviewLabelName) {
+			it.RemoveIssueLabel(issue, reviewLabelName)
 			fmt.Printf("Removed label '%v' from issue %v.\n", reviewLabelName, *issue.Number)
 		}
 
