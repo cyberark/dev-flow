@@ -42,6 +42,11 @@ func (s Slack) DirectMessage(username string, message string) {
 	if err != nil {
 		panic(err)
 	}
+
+	params := slack.PostMessageParameters{
+		Username: "dev-flow",
+		AsUser: true,
+	}
 	
-	client.PostMessage(channelID, message, slack.PostMessageParameters{})
+	client.PostMessage(channelID, message, params)
 }
