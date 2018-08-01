@@ -30,3 +30,12 @@ func (issue Issue) BranchName() string {
 	
 	return fmt.Sprintf("%v--%v", *issue.Number, title)
 }
+
+func (issue Issue) HasLabel(label string) bool {
+	for _, issueLabel := range issue.Labels {
+		if issueLabel == label {
+			return true
+		}
+	}
+	return false
+}
