@@ -7,6 +7,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
+	"github.com/conjurinc/dev-flow/chat"
 	"github.com/conjurinc/dev-flow/issuetracking"
 	"github.com/conjurinc/dev-flow/scm"
 	"github.com/conjurinc/dev-flow/util"
@@ -52,6 +53,15 @@ var completeCmd = &cobra.Command{
 		}
 
 		it.AssignIssue(issue, pr.Creator)
+
+		chat := chat.GetClient()
+
+		if chat != nil {
+			chat.DirectMessage(
+				pr.Creator,
+				fmt.Sprintf("%v has merged your pull request %v", it.GetCurrentUser(), pr.URL),
+			)
+		}
 
 		reviewLabelName := viper.GetString("labels.in_review")
 		
