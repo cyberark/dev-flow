@@ -58,7 +58,7 @@ var codereviewCmd = &cobra.Command{
 		}
 
 		it.AssignIssue(issue, reviewer)
-
+		
 		chat := chat.GetClient()
 
 		if chat != nil {

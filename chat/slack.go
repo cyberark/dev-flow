@@ -1,6 +1,7 @@
 package chat
 
 import (
+	"context"
 	"os"
 	
 	"github.com/nlopes/slack"
@@ -13,19 +14,17 @@ func (s Slack) client() *slack.Client {
 }
 
 func (s Slack) getUserID(username string) (string) {
-	client := s.client()
-
-	users, err := client.GetUsers()
-
+	users, err := s.getAllUsers()
+	
 	if err != nil {
 		panic(err)
 	}
 
 	var userID string
 
-	for _, slackuser := range users {
-		if slackuser.Name == username {
-			userID = slackuser.ID
+	for _, slackUser := range users {
+		if slackUser.Name == username || slackUser.Profile.DisplayName == username {
+			userID = slackUser.ID
 		}
 	}
 	
@@ -49,4 +48,19 @@ func (s Slack) DirectMessage(username string, message string) {
 	}
 	
 	client.PostMessage(channelID, message, params)
+}
+
+func (s Slack) getAllUsers() (results []slack.User, err error) {
+	// The Slack API  may require pagination in the future, in which case
+	// this limit of 0 will no longer work.
+	up := s.client().GetUsersPaginated(
+		slack.GetUsersOptionPresence(false),
+		slack.GetUsersOptionLimit(0),
+	)
+
+	up, err = up.Next(context.Background())
+
+	results = append(results, up.Users...)
+	
+	return results, up.Failure(err)
 }
