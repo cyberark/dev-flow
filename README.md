@@ -106,7 +106,7 @@ Alice and Bob both work on the CoolProject team at CoolOrg. They recently
 installed and configured `dev-flow` to automate some of the repetitive tasks
 that they must perform on a daily basis when contributing to CoolProject.
 
-Alice just finished wrapping up her most recent task and decides its time to
+Alice just finished wrapping up her most recent task and decides it's time to
 find her next one. She takes a look at the current issues in the CoolProject
 repository:
 
@@ -173,7 +173,7 @@ $ df cr bob
 
 Bob once again receives a notification from `dev-flow` bot and opens the link in
 his browser to verify the requested changes. Satisfied, he approves and merges
-merges the story into `master`:
+the story into `master`:
 
 ```
 $ df complete
