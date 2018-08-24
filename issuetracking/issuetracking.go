@@ -8,6 +8,7 @@ import (
 
 type IssueTrackingClient interface {
 	GetCurrentUser() string
+	GetUserRealName(string) string
 	Issues() []common.Issue
 	Issue(string) common.Issue
 	AssignIssue(common.Issue, string)
