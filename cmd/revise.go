@@ -32,7 +32,7 @@ var reviseCmd = &cobra.Command{
 
 		if chat != nil {
 			chat.DirectMessage(
-				pr.Creator,
+				it.GetUserRealName(pr.Creator),
 				fmt.Sprintf("%v has requested changes on %v", it.GetCurrentUser(), pr.URL),
 			)
 		}
