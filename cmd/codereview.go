@@ -1,12 +1,12 @@
 package cmd
 
 import (
-        "os"
+	"os"
 	"fmt"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	
+
 	"github.com/conjurinc/dev-flow/chat"
 	"github.com/conjurinc/dev-flow/issuetracking"
 	"github.com/conjurinc/dev-flow/scm"
