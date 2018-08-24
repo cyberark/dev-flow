@@ -1,12 +1,12 @@
 package cmd
 
 import (
-	"os"
+        "os"
 	"fmt"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-
+	
 	"github.com/conjurinc/dev-flow/chat"
 	"github.com/conjurinc/dev-flow/issuetracking"
 	"github.com/conjurinc/dev-flow/scm"
@@ -21,7 +21,7 @@ var codereviewCmd = &cobra.Command{
 	Args: cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		reviewer := args[0]
-		
+
 		branchName := versioncontrol.GetClient().CurrentBranch()
 
 		it := issuetracking.GetClient()
@@ -63,7 +63,7 @@ var codereviewCmd = &cobra.Command{
 
 		if chat != nil {
 			chat.DirectMessage(
-				reviewer,
+				it.GetUserRealName(reviewer),
 				fmt.Sprintf("%v has requested your review on %v", it.GetCurrentUser(), pr.URL),
 			)
 		}

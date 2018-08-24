@@ -19,15 +19,23 @@ func (gh GitHub) client() *github.Client {
 	return services.GitHub{}.GetClient()
 }
 
-func (gh GitHub) GetCurrentUser() string {
+func (gh GitHub) getUser(username string) *github.User {
 	client := gh.client()
-	ghuser, _, err := client.Users.Get(context.Background(), "")
+	ghUser, _, err := client.Users.Get(context.Background(), username)
 
 	if err != nil {
 		panic(err)
 	}
 
-	return *ghuser.Login
+	return ghUser
+}
+
+func (gh GitHub) GetCurrentUser() string {
+	return *gh.getUser("").Login
+}
+
+func (gh GitHub) GetUserRealName(username string) string {
+	return *gh.getUser(username).Name
 }
 
 func (gh GitHub) Issues() []common.Issue {

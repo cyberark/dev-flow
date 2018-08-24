@@ -13,7 +13,7 @@ func (s Slack) client() *slack.Client {
 	return slack.New(os.Getenv("SLACK_API_TOKEN"))
 }
 
-func (s Slack) getUserID(username string) (string) {
+func (s Slack) getUserID(userRealName string) (string) {
 	users, err := s.getAllUsers()
 	
 	if err != nil {
@@ -23,7 +23,8 @@ func (s Slack) getUserID(username string) (string) {
 	var userID string
 
 	for _, slackUser := range users {
-		if slackUser.Name == username || slackUser.Profile.DisplayName == username {
+		if slackUser.RealName == userRealName {
+			//fmt.Printf("%+v\n", slackUser)
 			userID = slackUser.ID
 		}
 	}
@@ -31,9 +32,9 @@ func (s Slack) getUserID(username string) (string) {
 	return userID
 }
 
-func (s Slack) DirectMessage(username string, message string) {
-	userID := s.getUserID(username)
-
+func (s Slack) DirectMessage(userRealName string, message string) {
+        userID := s.getUserID(userRealName)
+	
 	client := s.client()
 	
 	_, _, channelID, err := client.OpenIMChannel(userID)
