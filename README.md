@@ -72,6 +72,9 @@ yourself and retrieve its API token.
     SLACK_API_TOKEN: !var slack/api_token
     ```
 
+`dev-flow` should now be able to send messages to users when their attention is
+needed on an issue.
+
 ### Configure Labels
 
 `dev-flow` can apply labels during the lifecycle of a story. You can provide the
