@@ -104,6 +104,10 @@ func (gh GitHub) CreatePullRequest(issue common.Issue) *PullRequest {
 		[]string { *issue.Assignee },
 	)
 
+	if err != nil {
+		panic(err)
+	}
+
 	return gh.toCommonPullRequest(ghpr)
 }
 
