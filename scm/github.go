@@ -96,6 +96,14 @@ func (gh GitHub) CreatePullRequest(issue common.Issue) *PullRequest {
 		panic(err)
 	}
 
+	_, _, err = client.Issues.AddAssignees(
+		context.Background(),
+		repo.Owner,
+		repo.Name,
+		*ghpr.Number,
+		[]string { *issue.Assignee },
+	)
+
 	return gh.toCommonPullRequest(ghpr)
 }
 
