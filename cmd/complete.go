@@ -58,7 +58,7 @@ var completeCmd = &cobra.Command{
 
 		if chat != nil {
 			chat.DirectMessage(
-				pr.Creator,
+				it.GetUserRealName(pr.Creator),
 				fmt.Sprintf("%v has merged your pull request %v", it.GetCurrentUser(), pr.URL),
 			)
 		}
