@@ -57,8 +57,8 @@ var codereviewCmd = &cobra.Command{
 			pr = scm.CreatePullRequest(issue)
 		}
 
-		it.AssignIssue(issue, reviewer)
-		
+		scm.AssignPullRequestReviewer(pr, reviewer)
+
 		chat := chat.GetClient()
 
 		if chat != nil {

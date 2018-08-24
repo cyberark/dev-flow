@@ -96,7 +96,41 @@ func (gh GitHub) CreatePullRequest(issue common.Issue) *PullRequest {
 		panic(err)
 	}
 
+	_, _, err = client.Issues.AddAssignees(
+		context.Background(),
+		repo.Owner,
+		repo.Name,
+		*ghpr.Number,
+		[]string { *issue.Assignee },
+	)
+
+	if err != nil {
+		panic(err)
+	}
+
 	return gh.toCommonPullRequest(ghpr)
+}
+
+func (gh GitHub) AssignPullRequestReviewer(pr *PullRequest, reviewer string) {
+	repo := versioncontrol.GetClient().Repo()
+	
+	client := gh.client()
+	
+	reviewers := github.ReviewersRequest {
+		Reviewers: []string { reviewer },
+	}
+
+	_, _, err := client.PullRequests.RequestReviewers(
+		context.Background(),
+		repo.Owner,
+		repo.Name,
+		pr.Number,
+		reviewers,
+	)
+
+	if err != nil {
+		panic(err)
+	}
 }
 
 func (gh GitHub) MergePullRequest(pr *PullRequest) bool {
