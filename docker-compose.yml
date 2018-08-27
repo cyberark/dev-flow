@@ -1,0 +1,7 @@
+version: '3'
+services:
+  goreleaser:
+    image: cyberark/goreleaser
+    volumes:
+      - .:/go/src/github.com/cyberark/dev-flow
+    working_dir: /go/src/github.com/cyberark/dev-flow

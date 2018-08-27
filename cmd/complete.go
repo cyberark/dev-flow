@@ -3,21 +3,21 @@ package cmd
 import (
 	"fmt"
 	"os"
-	
+
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
-	"github.com/conjurinc/dev-flow/chat"
-	"github.com/conjurinc/dev-flow/issuetracking"
-	"github.com/conjurinc/dev-flow/scm"
-	"github.com/conjurinc/dev-flow/util"
-	"github.com/conjurinc/dev-flow/versioncontrol"
+	"github.com/cyberark/dev-flow/chat"
+	"github.com/cyberark/dev-flow/issuetracking"
+	"github.com/cyberark/dev-flow/scm"
+	"github.com/cyberark/dev-flow/util"
+	"github.com/cyberark/dev-flow/versioncontrol"
 )
 
 var completeCmd = &cobra.Command{
 	Use:   "complete",
 	Short: "Squash merges the story branch and completes the issue.",
-	Run: func(cmd *cobra.Command, args []string) {		
+	Run: func(cmd *cobra.Command, args []string) {
 		vc := versioncontrol.GetClient()
 		branchName := vc.CurrentBranch()
 
@@ -28,7 +28,7 @@ var completeCmd = &cobra.Command{
 			fmt.Println("No pull request found for branch", branchName)
 			os.Exit(1)
 		}
-		
+
 		if !pr.Mergeable {
 			fmt.Println("Pull request not mergeable. Check for conflicts.")
 			os.Exit(1)
@@ -64,7 +64,7 @@ var completeCmd = &cobra.Command{
 		}
 
 		reviewLabelName := viper.GetString("labels.in_review")
-		
+
 		if reviewLabelName != "" && issue.HasLabel(reviewLabelName) {
 			it.RemoveIssueLabel(issue, reviewLabelName)
 			fmt.Printf("Removed label '%v' from issue %v.\n", reviewLabelName, *issue.Number)
@@ -76,7 +76,7 @@ var completeCmd = &cobra.Command{
 			vc.DeleteRemoteBranch(branchName)
 			fmt.Println("Remote branch deleted.")
 		}
-		
+
 		if util.Confirm(fmt.Sprintf("Delete local branch %v", branchName)) {
 			vc.DeleteLocalBranch(branchName)
 			fmt.Println("Local branch deleted.")

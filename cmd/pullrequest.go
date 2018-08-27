@@ -4,17 +4,17 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
-	
-	"github.com/conjurinc/dev-flow/issuetracking"
-	"github.com/conjurinc/dev-flow/scm"
-	"github.com/conjurinc/dev-flow/util"
-	"github.com/conjurinc/dev-flow/versioncontrol"
+
+	"github.com/cyberark/dev-flow/issuetracking"
+	"github.com/cyberark/dev-flow/scm"
+	"github.com/cyberark/dev-flow/util"
+	"github.com/cyberark/dev-flow/versioncontrol"
 )
 
 var pullrequestCmd = &cobra.Command{
-	Use:   "pullrequest",
-	Aliases: []string { "pr" },
-	Short: "Creates a pull request for your branch.",
+	Use:     "pullrequest",
+	Aliases: []string{"pr"},
+	Short:   "Creates a pull request for your branch.",
 	Run: func(cmd *cobra.Command, args []string) {
 		branchName := versioncontrol.GetClient().CurrentBranch()
 
@@ -30,7 +30,7 @@ var pullrequestCmd = &cobra.Command{
 		}
 
 		if util.Confirm("Open pull request in browser?") {
-			util.Openbrowser(pr.URL)	
+			util.Openbrowser(pr.URL)
 		}
 	},
 }

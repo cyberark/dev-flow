@@ -5,10 +5,10 @@ import (
 	"fmt"
 
 	"github.com/google/go-github/github"
-	
-	"github.com/conjurinc/dev-flow/common"
-	"github.com/conjurinc/dev-flow/services"
-	"github.com/conjurinc/dev-flow/versioncontrol"
+
+	"github.com/cyberark/dev-flow/common"
+	"github.com/cyberark/dev-flow/services"
+	"github.com/cyberark/dev-flow/versioncontrol"
 )
 
 type GitHub struct{}
@@ -22,13 +22,13 @@ func (gh GitHub) GetPullRequest(branchName string) *PullRequest {
 
 	client := gh.client()
 
-	opts := &github.PullRequestListOptions {
+	opts := &github.PullRequestListOptions{
 		State: "open",
-		Base: "master",
-		Head: fmt.Sprintf("%v:%v", repo.Owner, branchName),
+		Base:  "master",
+		Head:  fmt.Sprintf("%v:%v", repo.Owner, branchName),
 	}
 
-	ghprs, _, err := client.PullRequests.List( 
+	ghprs, _, err := client.PullRequests.List(
 		context.Background(),
 		repo.Owner,
 		repo.Name,
@@ -40,7 +40,7 @@ func (gh GitHub) GetPullRequest(branchName string) *PullRequest {
 	}
 
 	var prnum *int
-	
+
 	for _, ghpr := range ghprs {
 		if *ghpr.Head.Ref == branchName {
 			prnum = ghpr.Number
@@ -48,7 +48,7 @@ func (gh GitHub) GetPullRequest(branchName string) *PullRequest {
 	}
 
 	var pr *PullRequest
-	
+
 	if prnum != nil {
 		// We call List and then Get because the Mergeable field is only
 		// returned when retrieving single issues.
@@ -65,26 +65,26 @@ func (gh GitHub) GetPullRequest(branchName string) *PullRequest {
 
 		pr = gh.toCommonPullRequest(ghpr)
 	}
-	
+
 	return pr
 }
 
 func (gh GitHub) CreatePullRequest(issue common.Issue) *PullRequest {
 	repo := versioncontrol.GetClient().Repo()
-	
+
 	base := "master"
 	head := issue.BranchName()
 	body := fmt.Sprintf("Closes #%v", *issue.Number)
-	
-	ghnpr := &github.NewPullRequest {
-		Base: &base,
-		Head: &head,
+
+	ghnpr := &github.NewPullRequest{
+		Base:  &base,
+		Head:  &head,
 		Title: issue.Title,
-		Body: &body,
+		Body:  &body,
 	}
 
 	client := gh.client()
-	
+
 	ghpr, _, err := client.PullRequests.Create(
 		context.Background(),
 		repo.Owner,
@@ -101,7 +101,7 @@ func (gh GitHub) CreatePullRequest(issue common.Issue) *PullRequest {
 		repo.Owner,
 		repo.Name,
 		*ghpr.Number,
-		[]string { *issue.Assignee },
+		[]string{*issue.Assignee},
 	)
 
 	if err != nil {
@@ -113,11 +113,11 @@ func (gh GitHub) CreatePullRequest(issue common.Issue) *PullRequest {
 
 func (gh GitHub) AssignPullRequestReviewer(pr *PullRequest, reviewer string) {
 	repo := versioncontrol.GetClient().Repo()
-	
+
 	client := gh.client()
-	
-	reviewers := github.ReviewersRequest {
-		Reviewers: []string { reviewer },
+
+	reviewers := github.ReviewersRequest{
+		Reviewers: []string{reviewer},
 	}
 
 	_, _, err := client.PullRequests.RequestReviewers(
@@ -135,13 +135,13 @@ func (gh GitHub) AssignPullRequestReviewer(pr *PullRequest, reviewer string) {
 
 func (gh GitHub) MergePullRequest(pr *PullRequest) bool {
 	repo := versioncontrol.GetClient().Repo()
-	
+
 	client := gh.client()
 
-	prOpt := &github.PullRequestOptions {
+	prOpt := &github.PullRequestOptions{
 		MergeMethod: "squash",
 	}
-	
+
 	ghmr, _, err := client.PullRequests.Merge(
 		context.Background(),
 		repo.Owner,
@@ -154,7 +154,7 @@ func (gh GitHub) MergePullRequest(pr *PullRequest) bool {
 	if err != nil {
 		panic(err)
 	}
-	
+
 	return *ghmr.Merged
 }
 
@@ -164,12 +164,12 @@ func (gh GitHub) toCommonPullRequest(ghpr *github.PullRequest) *PullRequest {
 	if ghpr.Mergeable != nil {
 		mergeable = *ghpr.Mergeable
 	}
-	
-	return &PullRequest {
-		Number: *ghpr.Number,
-		Creator: *ghpr.User.Login,
-		Base: *ghpr.Base.Ref,
+
+	return &PullRequest{
+		Number:    *ghpr.Number,
+		Creator:   *ghpr.User.Login,
+		Base:      *ghpr.Base.Ref,
 		Mergeable: mergeable,
-		URL: *ghpr.HTMLURL,
+		URL:       *ghpr.HTMLURL,
 	}
 }

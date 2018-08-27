@@ -1,16 +1,16 @@
 package issuetracking
 
 import (
-	"fmt"
 	"context"
 	"errors"
+	"fmt"
 	"strconv"
-	
+
 	"github.com/google/go-github/github"
 
-	"github.com/conjurinc/dev-flow/common"
-	"github.com/conjurinc/dev-flow/services"
-	"github.com/conjurinc/dev-flow/versioncontrol"
+	"github.com/cyberark/dev-flow/common"
+	"github.com/cyberark/dev-flow/services"
+	"github.com/cyberark/dev-flow/versioncontrol"
 )
 
 type GitHub struct{}
@@ -53,7 +53,7 @@ func (gh GitHub) Issues() []common.Issue {
 	}
 
 	var issues []common.Issue
-	
+
 	for _, ghIssue := range ghIssues {
 		if ghIssue.PullRequestLinks == nil {
 			issue := services.GitHub{}.ToCommonIssue(ghIssue)
@@ -66,7 +66,7 @@ func (gh GitHub) Issues() []common.Issue {
 
 func (gh GitHub) Issue(issueKey string) common.Issue {
 	repo := versioncontrol.Git{}.Repo()
-	
+
 	client := gh.client()
 
 	issueNum, err := strconv.Atoi(issueKey)
@@ -74,7 +74,7 @@ func (gh GitHub) Issue(issueKey string) common.Issue {
 	if err != nil {
 		panic(err)
 	}
-	
+
 	ghIssue, _, err := client.Issues.Get(
 		context.Background(),
 		repo.Owner,
@@ -91,7 +91,7 @@ func (gh GitHub) Issue(issueKey string) common.Issue {
 
 func (gh GitHub) AssignIssue(issue common.Issue, login string) {
 	repo := versioncontrol.Git{}.Repo()
-	
+
 	client := gh.client()
 
 	_, _, err := client.Issues.AddAssignees(
@@ -99,7 +99,7 @@ func (gh GitHub) AssignIssue(issue common.Issue, login string) {
 		repo.Owner,
 		repo.Name,
 		*issue.Number,
-		[]string { login },
+		[]string{login},
 	)
 
 	if err != nil {
@@ -113,13 +113,13 @@ func (gh GitHub) AddIssueLabel(issue common.Issue, labelName string) error {
 	client := gh.client()
 
 	_, err := gh.getLabel(labelName)
-	
+
 	if err != nil {
 		return errors.New(fmt.Sprintf("Label '%v' does not exist.", labelName))
 	}
-	
+
 	labels := []string{labelName}
-	
+
 	_, _, err = client.Issues.AddLabelsToIssue(
 		context.Background(),
 		repo.Owner,
@@ -155,7 +155,7 @@ func (gh GitHub) RemoveIssueLabel(issue common.Issue, labelName string) {
 
 func (gh GitHub) getLabel(name string) (*github.Label, error) {
 	repo := versioncontrol.GetClient().Repo()
-	
+
 	client := gh.client()
 
 	ghl, _, err := client.Issues.GetLabel(
