@@ -1,6 +1,8 @@
 # dev-flow
 
-The dev-flow CLI is a tool for standardizing and automating common development tasks.
+The dev-flow CLI is a tool for standardizing and automating common development
+tasks. It currently only supports GitHub for managing issues and pull requests,
+but is built to be easily extendible for additional tooling.
 
 ## Setup
 
