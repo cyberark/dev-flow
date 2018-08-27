@@ -30,7 +30,7 @@ checksum:
 brew:
   description: CLI for standardizing and automating common development tasks
   homepage: https://github.com/cyberark/dev-flow
-  url_template: https://github.com/cyberark/dev-flow/releases/download/v{{.Version}}/summon-conjur-darwin-amd64.tar.gz
+  url_template: https://github.com/cyberark/dev-flow/releases/download/v{{.Version}}/dev-flow-darwin-amd64.tar.gz
   install: |
     bin.install "dev-flow"
   test: |
