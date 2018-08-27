@@ -16,7 +16,7 @@ import (
 
 var completeCmd = &cobra.Command{
 	Use:   "complete",
-	Short: "Merges the story branch and completes the issue.",
+	Short: "Squash merges the story branch and completes the issue.",
 	Run: func(cmd *cobra.Command, args []string) {		
 		vc := versioncontrol.GetClient()
 		branchName := vc.CurrentBranch()
@@ -34,7 +34,7 @@ var completeCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		if !util.Confirm(fmt.Sprintf("Are you sure you want to merge %v into %v", branchName, pr.Base)) {
+		if !util.Confirm(fmt.Sprintf("Are you sure you want to squash merge %v into %v", branchName, pr.Base)) {
 			fmt.Println("Pull request not merged.")
 			os.Exit(0)
 		}
