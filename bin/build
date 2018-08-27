@@ -1,0 +1,17 @@
+#!/bin/bash -e
+
+git fetch --tags  # jenkins does not do this automatically yet
+
+docker-compose pull goreleaser
+
+echo "> Building and packaging binaries"
+docker-compose run --rm -T --entrypoint sh goreleaser -es <<EOF
+dep ensure -v
+goreleaser release --rm-dist --skip-validate --snapshot
+EOF
+
+bin_name='dev-flow'
+goos='linux'  # uname -s | tr '[:upper:]' '[:lower:]'
+goarch="amd64"
+
+cp "dist/${goos}_${goarch}/${bin_name}" .  # for following test stages

@@ -1,7 +1,7 @@
 package scm
 
 import (
-	"github.com/conjurinc/dev-flow/common"
+	"github.com/cyberark/dev-flow/common"
 )
 
 type SourceControlManagementClient interface {
@@ -20,9 +20,9 @@ func GetClient() SourceControlManagementClient {
 }
 
 type PullRequest struct {
-	Number int
-	Creator string
-	Base string
+	Number    int
+	Creator   string
+	Base      string
 	Mergeable bool
-	URL string
+	URL       string
 }

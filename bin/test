@@ -1,0 +1,7 @@
+#!/bin/bash -e
+
+docker-compose run --rm -T --entrypoint sh goreleaser -es <<EOF
+dep ensure -v
+go build -v
+./dev-flow -h
+EOF

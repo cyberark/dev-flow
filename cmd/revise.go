@@ -2,13 +2,13 @@ package cmd
 
 import (
 	"fmt"
-	
+
 	"github.com/spf13/cobra"
 
-	"github.com/conjurinc/dev-flow/chat"
-	"github.com/conjurinc/dev-flow/issuetracking"
-	"github.com/conjurinc/dev-flow/scm"
-	"github.com/conjurinc/dev-flow/versioncontrol"
+	"github.com/cyberark/dev-flow/chat"
+	"github.com/cyberark/dev-flow/issuetracking"
+	"github.com/cyberark/dev-flow/scm"
+	"github.com/cyberark/dev-flow/versioncontrol"
 )
 
 var reviseCmd = &cobra.Command{
@@ -18,7 +18,7 @@ var reviseCmd = &cobra.Command{
 		vc := versioncontrol.GetClient()
 		branchName := vc.CurrentBranch()
 		issueKey := issuetracking.GetIssueKeyFromBranchName(branchName)
-		
+
 		scm := scm.GetClient()
 		pr := scm.GetPullRequest(branchName)
 

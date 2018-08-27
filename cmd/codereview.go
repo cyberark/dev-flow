@@ -1,24 +1,24 @@
 package cmd
 
 import (
-	"os"
 	"fmt"
+	"os"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
-	"github.com/conjurinc/dev-flow/chat"
-	"github.com/conjurinc/dev-flow/issuetracking"
-	"github.com/conjurinc/dev-flow/scm"
-	"github.com/conjurinc/dev-flow/util"
-	"github.com/conjurinc/dev-flow/versioncontrol"
+	"github.com/cyberark/dev-flow/chat"
+	"github.com/cyberark/dev-flow/issuetracking"
+	"github.com/cyberark/dev-flow/scm"
+	"github.com/cyberark/dev-flow/util"
+	"github.com/cyberark/dev-flow/versioncontrol"
 )
 
 var codereviewCmd = &cobra.Command{
-	Use:   "codereview [reviewer]",
-	Aliases: []string { "cr" },
-	Short: "Creates a pull request and assigns a reviewer.",
-	Args: cobra.MinimumNArgs(1),
+	Use:     "codereview [reviewer]",
+	Aliases: []string{"cr"},
+	Short:   "Creates a pull request and assigns a reviewer.",
+	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		reviewer := args[0]
 
@@ -34,7 +34,7 @@ var codereviewCmd = &cobra.Command{
 			it.RemoveIssueLabel(issue, progressLabelName)
 			fmt.Printf("Removed label '%v' from issue %v.\n", progressLabelName, *issue.Number)
 		}
-		
+
 		reviewLabelName := viper.GetString("labels.in_review")
 
 		if reviewLabelName != "" {
@@ -44,13 +44,13 @@ var codereviewCmd = &cobra.Command{
 				fmt.Println(err)
 				os.Exit(1)
 			}
-		
+
 			fmt.Printf("Added label '%v' to issue %v.\n", reviewLabelName, *issue.Number)
 		}
-		
+
 		scm := scm.GetClient()
 		pr := scm.GetPullRequest(branchName)
-		
+
 		if pr != nil {
 			fmt.Println("Pull request already exists for branch", branchName)
 		} else {
@@ -67,9 +67,9 @@ var codereviewCmd = &cobra.Command{
 				fmt.Sprintf("%v has requested your review on %v", it.GetCurrentUser(), pr.URL),
 			)
 		}
-		
+
 		if util.Confirm("Open pull request in browser?") {
-			util.Openbrowser(pr.URL)	
+			util.Openbrowser(pr.URL)
 		}
 	},
 }

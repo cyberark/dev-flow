@@ -3,21 +3,21 @@ package cmd
 import (
 	"fmt"
 	"os"
-	
+
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
-	"github.com/conjurinc/dev-flow/issuetracking"
-	"github.com/conjurinc/dev-flow/versioncontrol"
+	"github.com/cyberark/dev-flow/issuetracking"
+	"github.com/cyberark/dev-flow/versioncontrol"
 )
 
 var startCmd = &cobra.Command{
 	Use:   "start",
 	Short: "Creates a remote branch and initial commit for the specified issue",
-	Args: cobra.ExactArgs(1),
+	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		issueKey := args[0]
-		
+
 		it := issuetracking.GetClient()
 		issue := it.Issue(issueKey)
 
@@ -34,16 +34,16 @@ var startCmd = &cobra.Command{
 				fmt.Println(err)
 				os.Exit(1)
 			}
-		
+
 			fmt.Printf("Added label '%v' to issue %v.\n", progressLabelName, *issue.Number)
 		}
 
 		vc := versioncontrol.GetClient()
-		
+
 		vc.CheckoutAndPull("master")
 
 		branchName := issue.BranchName()
-		
+
 		if vc.IsRemoteBranch(branchName) {
 			vc.CheckoutAndPull(branchName)
 		} else {

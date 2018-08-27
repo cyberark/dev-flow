@@ -4,6 +4,13 @@ The dev-flow CLI is a tool for standardizing and automating common development
 tasks. It currently only supports GitHub for managing issues and pull requests,
 but is built to be easily extendible for additional tooling.
 
+[![GitHub release](https://img.shields.io/github/release/cyberark/dev-flow.svg)](https://github.com/cyberark/dev-flow/releases/latest)
+
+[![pipeline status](https://gitlab.com/cyberark/dev-flow/badges/master/pipeline.svg)](https://gitlab.com/cyberark/dev-flow/pipelines)
+[![Maintainability](https://api.codeclimate.com/v1/badges/2fbe5ba2a5ac283854f0/maintainability)](https://codeclimate.com/github/cyberark/dev-flow/maintainability)
+
+---
+
 ## Setup
 
 ### Install Golang
@@ -15,8 +22,8 @@ If you haven't already, follow the Go [installation instructions](https://golang
 Install `dev-flow` like so:
 
 ```
-go get github.com/conjurinc/dev-flow
-cd $GOPATH/src/github.com/conjurinc/dev-flow
+go get github.com/cyberark/dev-flow
+cd $GOPATH/src/github.com/cyberark/dev-flow
 go install
 ```
 

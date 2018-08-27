@@ -3,7 +3,7 @@ package issuetracking
 import (
 	"strings"
 
-	"github.com/conjurinc/dev-flow/common"
+	"github.com/cyberark/dev-flow/common"
 )
 
 type IssueTrackingClient interface {
