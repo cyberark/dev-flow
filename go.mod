@@ -1,0 +1,29 @@
+module github.com/cyberark/dev-flow
+
+require (
+	github.com/fsnotify/fsnotify v1.4.7
+	github.com/golang/protobuf v1.2.0
+	github.com/google/go-github v17.0.0+incompatible
+	github.com/google/go-github/v18 v18.2.0
+	github.com/google/go-querystring v1.0.0
+	github.com/gorilla/websocket v1.3.0
+	github.com/hashicorp/hcl v1.0.0
+	github.com/inconshreveable/mousetrap v1.0.0
+	github.com/magiconair/properties v1.8.0
+	github.com/mitchellh/go-homedir v1.0.0
+	github.com/mitchellh/mapstructure v1.0.0
+	github.com/nlopes/slack v0.3.0
+	github.com/pelletier/go-toml v1.2.0
+	github.com/spf13/afero v1.1.1
+	github.com/spf13/cast v1.2.0
+	github.com/spf13/cobra v0.0.3
+	github.com/spf13/jwalterweatherman v0.0.0-20180814060501-14d3d4c51834
+	github.com/spf13/pflag v1.0.2
+	github.com/spf13/viper v1.1.0
+	golang.org/x/net v0.0.0-20180826012351-8a410e7b638d
+	golang.org/x/oauth2 v0.0.0-20180821212333-d2e6202438be
+	golang.org/x/sys v0.0.0-20180824143301-4910a1d54f87
+	golang.org/x/text v0.3.0
+	google.golang.org/appengine v1.1.0
+	gopkg.in/yaml.v2 v2.2.1
+)
