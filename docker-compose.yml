@@ -3,5 +3,5 @@ services:
   goreleaser:
     image: cyberark/goreleaser
     volumes:
-      - .:/go/src/github.com/cyberark/dev-flow
-    working_dir: /go/src/github.com/cyberark/dev-flow
+      - .:/dev-flow
+    working_dir: /dev-flow
