@@ -11,7 +11,6 @@ docker-compose pull goreleaser
 
 echo "> Building and packaging binaries"
 docker-compose run --rm -T --entrypoint sh goreleaser -es <<EOF
-go mod download
 goreleaser release $GORELEASER_ARGS
 EOF
 
