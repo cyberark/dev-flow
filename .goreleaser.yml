@@ -2,7 +2,8 @@
 project_name: dev-flow
 
 before:
-  hooks: []
+  hooks:
+  - go mod download
 
 builds:
 - binary: dev-flow

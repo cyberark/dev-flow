@@ -1,13 +1,17 @@
 #!/bin/bash -e
 
+GORELEASER_ARGS='--rm-dist --skip-validate'
+if [ "$CI_COMMIT_REF_NAME" != "master" ]; then
+  GORELEASER_ARGS="$GORELEASER_ARGS --snapshot"
+fi
+
 git fetch --tags  # jenkins does not do this automatically yet
 
 docker-compose pull goreleaser
 
 echo "> Building and packaging binaries"
 docker-compose run --rm -T --entrypoint sh goreleaser -es <<EOF
-dep ensure -v
-goreleaser release --rm-dist --skip-validate
+goreleaser release $GORELEASER_ARGS
 EOF
 
 bin_name='dev-flow'
