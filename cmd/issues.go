@@ -11,8 +11,8 @@ import (
 
 var issuesCmd = &cobra.Command{
 	Use:   "issues",
-	Short: "List a user's GitHub issues.",
-	Long:  "Lists issues assigned to a user across all projects.",
+	Short: "Lists open, unassigned issues on the current repository.",
+	Long:  "Lists open, unassigned issues on the current repository.",
 	Run: func(cmd *cobra.Command, args []string) {
 		it := issuetracking.GetClient()
 
