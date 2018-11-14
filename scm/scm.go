@@ -8,7 +8,7 @@ type SourceControlManagementClient interface {
 	GetPullRequest(string) *PullRequest
 	CreatePullRequest(common.Issue) *PullRequest
 	AssignPullRequestReviewer(*PullRequest, string)
-	MergePullRequest(*PullRequest) bool
+	MergePullRequest(*PullRequest, string) bool
 }
 
 func (pr PullRequest) String() string {
