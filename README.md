@@ -103,6 +103,7 @@ You must create these labels in your issue tracker before using them as
 Once `dev-flow` is installed, the following commands can be run from the root directory of a source-controlled project:
 
 - `issues`: list open issues.
+- `issue [issue-key]`: open issue in browser.
 - `start [issue-num]`: create branch, assign issue to self and update labels.
 - `pullrequest` (`pr`): create pull request for current branch into `master`.
 - `codereview [username]` (`cr`): create pull request into `master` and assign issue to user.
@@ -126,8 +127,14 @@ $ df issues
 45 - fix this crazy bug! (unassigned) [bug, ready]
 ```
 
-"That last one sounds like a fun challenge", Alice thinks to herself. She rolls
-up her sleeves and begins working on the issue:
+"That last one sounds like a fun challenge", Alice thinks to herself. Let's get
+more detail. She runs the `issue` command to open the issue in her browser:
+
+```
+$ df issue 45
+```
+
+After reading over the issue, She rolls up her sleeves and begins working on the issue:
 
 ```
 $ df start 45
