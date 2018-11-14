@@ -14,10 +14,23 @@ import (
 	"github.com/cyberark/dev-flow/versioncontrol"
 )
 
+var MergeMethod string = "rebase"
+
 var completeCmd = &cobra.Command{
 	Use:   "complete",
 	Short: "Squash merges the story branch and completes the issue.",
 	Run: func(cmd *cobra.Command, args []string) {
+		validMergeMethods := map[string]bool {
+			"rebase": true,
+			"squash": true,
+			"merge": true,
+		}
+
+		if !validMergeMethods[MergeMethod] {
+			fmt.Printf("Invalid merge method: %s. Must be rebase, squash, or merge.", MergeMethod)
+			os.Exit(1)
+		}
+		
 		vc := versioncontrol.GetClient()
 		branchName := vc.CurrentBranch()
 
@@ -34,12 +47,12 @@ var completeCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		if !util.Confirm(fmt.Sprintf("Are you sure you want to squash merge %v into %v", branchName, pr.Base)) {
+		if !util.Confirm(fmt.Sprintf("Are you sure you want to merge %v into %v?", branchName, pr.Base)) {
 			fmt.Println("Pull request not merged.")
 			os.Exit(0)
 		}
 
-		success := scm.MergePullRequest(pr)
+		success := scm.MergePullRequest(pr, MergeMethod)
 
 		it := issuetracking.GetClient()
 		issueKey := issuetracking.GetIssueKeyFromBranchName(branchName)
@@ -85,5 +98,13 @@ var completeCmd = &cobra.Command{
 }
 
 func init() {
+	completeCmd.Flags().StringVarP(
+		&MergeMethod,
+		"merge-method",
+		"m",
+		"rebase",
+		"Merge method to use (rebase, squash, or merge). Defaults to rebase.",
+	)
+	
 	rootCmd.AddCommand(completeCmd)
 }

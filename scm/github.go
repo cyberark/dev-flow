@@ -133,13 +133,13 @@ func (gh GitHub) AssignPullRequestReviewer(pr *PullRequest, reviewer string) {
 	}
 }
 
-func (gh GitHub) MergePullRequest(pr *PullRequest) bool {
+func (gh GitHub) MergePullRequest(pr *PullRequest, mergeMethod string) bool {
 	repo := versioncontrol.GetClient().Repo()
 
 	client := gh.client()
 
 	prOpt := &github.PullRequestOptions{
-		MergeMethod: "squash",
+		MergeMethod: mergeMethod,
 	}
 
 	ghmr, _, err := client.PullRequests.Merge(
