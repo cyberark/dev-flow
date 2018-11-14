@@ -103,7 +103,7 @@ You must create these labels in your issue tracker before using them as
 Once `dev-flow` is installed, the following commands can be run from the root directory of a source-controlled project:
 
 - `issues`: list open issues.
-- `start [issue-num]`: create branch, perform initial commit, and assign issue to self.
+- `start [issue-num]`: create branch, assign issue to self and update labels.
 - `pullrequest` (`pr`): create pull request for current branch into `master`.
 - `codereview [username]` (`cr`): create pull request into `master` and assign issue to user.
 - `revise`: reject pull request and assign issue back to pull request creator.

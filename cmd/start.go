@@ -13,7 +13,7 @@ import (
 
 var startCmd = &cobra.Command{
 	Use:   "start",
-	Short: "Creates a remote branch and initial commit for the specified issue",
+	Short: "Creates a remote branch for the specified issue",
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		issueKey := args[0]

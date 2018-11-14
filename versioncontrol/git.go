@@ -67,9 +67,6 @@ func (git Git) InitBranch(issueNum int, branchName string) {
 	cmd := fmt.Sprintf("git checkout -b %v", branchName)
 	git.runCommand(cmd, true)
 	
-	cmd = fmt.Sprintf("git commit -m 'Issue %v Started.' --allow-empty", issueNum)
-	git.runCommand(cmd, true)
-
 	cmd = fmt.Sprintf("git push --set-upstream origin %v", branchName)
 	git.runCommand(cmd, true)
 }
