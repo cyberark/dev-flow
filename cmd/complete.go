@@ -76,7 +76,7 @@ var completeCmd = &cobra.Command{
 			)
 		}
 
-		reviewLabelName := viper.GetString("labels.in_review")
+		reviewLabelName := viper.GetString("labels.codereview")
 
 		if reviewLabelName != "" && issue.HasLabel(reviewLabelName) {
 			it.RemoveIssueLabel(issue, reviewLabelName)

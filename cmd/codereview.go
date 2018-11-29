@@ -28,14 +28,14 @@ var codereviewCmd = &cobra.Command{
 		issueKey := issuetracking.GetIssueKeyFromBranchName(branchName)
 		issue := it.Issue(issueKey)
 
-		progressLabelName := viper.GetString("labels.in_progress")
+		progressLabelName := viper.GetString("labels.start")
 
 		if progressLabelName != "" && issue.HasLabel(progressLabelName) {
 			it.RemoveIssueLabel(issue, progressLabelName)
 			fmt.Printf("Removed label '%v' from issue %v.\n", progressLabelName, *issue.Number)
 		}
 
-		reviewLabelName := viper.GetString("labels.in_review")
+		reviewLabelName := viper.GetString("labels.codereview")
 
 		if reviewLabelName != "" {
 			err := it.AddIssueLabel(issue, reviewLabelName)
