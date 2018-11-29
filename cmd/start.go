@@ -25,7 +25,7 @@ var startCmd = &cobra.Command{
 		it.AssignIssue(issue, user)
 		fmt.Printf("Assigned issue %v to user %v.\n", *issue.Number, user)
 
-		progressLabelName := viper.GetString("labels.in_progress")
+		progressLabelName := viper.GetString("labels.start")
 
 		if progressLabelName != "" {
 			err := it.AddIssueLabel(issue, progressLabelName)
