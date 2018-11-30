@@ -1,5 +1,8 @@
 #!/bin/bash -e
 
+BIN_NAME="dev-flow"
+GORELEASER_IMAGE="goreleaser/goreleaser:latest-cgo"
+
 GORELEASER_ARGS='--rm-dist --skip-validate'
 if [ "$CI_COMMIT_REF_NAME" != "master" ]; then
   GORELEASER_ARGS="$GORELEASER_ARGS --snapshot"
@@ -7,15 +10,15 @@ fi
 
 git fetch --tags  # jenkins does not do this automatically yet
 
-docker-compose pull goreleaser
+docker pull "${GORELEASER_IMAGE}"
 
 echo "> Building and packaging binaries"
-docker-compose run --rm -T --entrypoint sh goreleaser -es <<EOF
-goreleaser release $GORELEASER_ARGS
-EOF
+docker run --rm -t \
+  -v "$PWD:/${BIN_NAME}" \
+  -w "/${BIN_NAME}" \
+  "${GORELEASER_IMAGE}" ${GORELEASER_ARGS}
 
-bin_name='dev-flow'
 goos='linux'  # uname -s | tr '[:upper:]' '[:lower:]'
 goarch="amd64"
 
-cp "dist/${goos}_${goarch}/${bin_name}" .  # for following test stages
+cp "dist/${goos}_${goarch}/${BIN_NAME}" .  # for following test stages

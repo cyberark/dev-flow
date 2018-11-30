@@ -1,6 +1,8 @@
 #!/bin/bash -e
 
-docker-compose run --rm -T --entrypoint sh goreleaser -es <<EOF
-go build -v
-./dev-flow -h
-EOF
+TEST_CMD='apk add --no-cache git build-base && go build && ./dev-flow -h'
+
+docker run --rm  -t \
+           -v "$PWD:/dev-flow" \
+           -w "/dev-flow" \
+           golang:1.11-alpine sh -c "${TEST_CMD}"

@@ -1,7 +1,0 @@
-version: '3'
-services:
-  goreleaser:
-    image: cyberark/goreleaser
-    volumes:
-      - .:/dev-flow
-    working_dir: /dev-flow
