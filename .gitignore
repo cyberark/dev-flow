@@ -1,3 +1,6 @@
 dev-flow
 vendor/
 dist/
+
+# Vim swapfiles
+*.sw[po]
