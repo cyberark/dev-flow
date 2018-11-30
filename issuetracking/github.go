@@ -133,6 +133,8 @@ func (gh GitHub) AddIssueLabel(issue common.Issue, labelName string) error {
 		return err
 	}
 
+	fmt.Println("Added label '%s' to issue %d", labelName, issue.Number)
+
 	return nil
 }
 
@@ -152,6 +154,8 @@ func (gh GitHub) RemoveIssueLabel(issue common.Issue, labelName string) {
 	if err != nil {
 		panic(err)
 	}
+
+	fmt.Println("Removed label '%s' from issue %d", labelName, issue.Number)
 }
 
 func (gh GitHub) getLabel(name string) (*github.Label, error) {

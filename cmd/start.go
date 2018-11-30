@@ -37,8 +37,6 @@ var startCmd = &cobra.Command{
 			if err != nil {
 				log.Fatalln(err)
 			}
-
-			fmt.Printf("Added label '%v' to issue %v.\n", progressLabelName, *issue.Number)
 		}
 
 		vc := versioncontrol.GetClient()

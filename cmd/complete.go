@@ -85,7 +85,16 @@ var completeCmd = &cobra.Command{
 
 		if reviewLabelName != "" && issue.HasLabel(reviewLabelName) {
 			it.RemoveIssueLabel(issue, reviewLabelName)
-			fmt.Printf("Removed label '%v' from issue %v.\n", reviewLabelName, *issue.Number)
+		}
+
+		completeLabelName := viper.GetString("labels.complete")
+
+		if completeLabelName != "" && !issue.HasLabel(completeLabelName) {
+			err := it.AddIssueLabel(issue, completeLabelName)
+
+			if err != nil {
+				log.Fatalln(err)
+			}
 		}
 
 		vc.CheckoutAndPull(pr.Base)
