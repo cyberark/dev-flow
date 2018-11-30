@@ -20,7 +20,11 @@ var codereviewCmd = &cobra.Command{
 	Short:   "Creates a pull request and assigns a reviewer.",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		validateLinkType()
+		util.ValidateStringParam(
+			"link-type",
+			LinkType,
+			[]string{ "close", "connect" },
+		)
 		
 		reviewer := args[0]
 

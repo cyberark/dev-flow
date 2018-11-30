@@ -21,16 +21,11 @@ var completeCmd = &cobra.Command{
 	Use:   "complete",
 	Short: "Squash merges the story branch and completes the issue.",
 	Run: func(cmd *cobra.Command, args []string) {
-		validMergeMethods := map[string]bool {
-			"rebase": true,
-			"squash": true,
-			"merge": true,
-		}
-
-		if !validMergeMethods[MergeMethod] {
-			err := fmt.Sprintf("Invalid merge method: %s. Must be rebase, squash, or merge.", MergeMethod)
-			log.Fatalln(err)
-		}
+		util.ValidateStringParam(
+			"merge-method",
+			MergeMethod,
+			[]string{ "rebase", "squash", "merge" },
+		)
 		
 		vc := versioncontrol.GetClient()
 		branchName := vc.CurrentBranch()

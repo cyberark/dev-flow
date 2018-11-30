@@ -19,7 +19,11 @@ var pullrequestCmd = &cobra.Command{
 	Aliases: []string{"pr"},
 	Short:   "Creates a pull request for your branch.",
 	Run: func(cmd *cobra.Command, args []string) {
-		validateLinkType()
+		util.ValidateStringParam(
+			"link-type",
+			LinkType,
+			[]string{ "close", "connect" },
+		)
 		
 		branchName := versioncontrol.GetClient().CurrentBranch()
 
@@ -55,16 +59,4 @@ func init() {
 		"close",
 		"The type of link to create with the associated issue.",
 	)
-}
-
-func validateLinkType() {
-	validLinkTypes := map[string]bool {
-		"close": true,
-		"connect": true,
-	}
-
-	if !validLinkTypes[LinkType] {
-		err := fmt.Sprintf("Invalid link type: %s. Must be close or connect.")
-		log.Fatalln(err)
-	}
 }
