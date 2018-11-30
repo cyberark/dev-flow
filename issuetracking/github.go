@@ -64,7 +64,7 @@ func (gh GitHub) Issues() []common.Issue {
 	return issues
 }
 
-func (gh GitHub) Issue(issueKey string) common.Issue {
+func (gh GitHub) Issue(issueKey string) (common.Issue, error) {
 	repo := versioncontrol.Git{}.Repo()
 
 	client := gh.client()
@@ -83,10 +83,11 @@ func (gh GitHub) Issue(issueKey string) common.Issue {
 	)
 
 	if err != nil {
-		panic(err)
+		return common.Issue{},
+		errors.New(fmt.Sprintf("Could not find issue number %d", issueNum))
 	}
 
-	return services.GitHub{}.ToCommonIssue(ghIssue)
+	return services.GitHub{}.ToCommonIssue(ghIssue), nil
 }
 
 func (gh GitHub) AssignIssue(issue common.Issue, login string) {

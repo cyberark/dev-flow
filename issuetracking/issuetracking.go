@@ -10,7 +10,7 @@ type IssueTrackingClient interface {
 	GetCurrentUser() string
 	GetUserRealName(string) string
 	Issues() []common.Issue
-	Issue(string) common.Issue
+	Issue(string) (common.Issue, error)
 	AssignIssue(common.Issue, string)
 	AddIssueLabel(common.Issue, string) error
 	RemoveIssueLabel(common.Issue, string)

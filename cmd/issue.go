@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"log"
+	
 	"github.com/spf13/cobra"
 
 	"github.com/cyberark/dev-flow/issuetracking"
@@ -16,7 +18,11 @@ var issueCmd = &cobra.Command{
 		issueKey := args[0]
 		
 		it := issuetracking.GetClient()
-		issue := it.Issue(issueKey)
+		issue, err := it.Issue(issueKey)
+
+		if err != nil {
+			log.Fatalln(err)
+		}
 
 		util.Openbrowser(*issue.URL)
 	},
