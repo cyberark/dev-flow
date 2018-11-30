@@ -19,7 +19,12 @@ var startCmd = &cobra.Command{
 		issueKey := args[0]
 
 		it := issuetracking.GetClient()
-		issue := it.Issue(issueKey)
+		issue, err := it.Issue(issueKey)
+
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
 
 		user := it.GetCurrentUser()
 		it.AssignIssue(issue, user)

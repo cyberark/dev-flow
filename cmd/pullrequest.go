@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/spf13/cobra"
 
@@ -25,7 +26,13 @@ var pullrequestCmd = &cobra.Command{
 			fmt.Println("Pull request already exists for branch", branchName)
 		} else {
 			issueKey := issuetracking.GetIssueKeyFromBranchName(branchName)
-			issue := issuetracking.GetClient().Issue(issueKey)
+			issue, err := issuetracking.GetClient().Issue(issueKey)
+
+			if err != nil {
+				fmt.Println(err)
+				os.Exit(1)
+			}
+			
 			pr = scm.CreatePullRequest(issue)
 		}
 

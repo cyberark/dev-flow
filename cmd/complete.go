@@ -56,7 +56,12 @@ var completeCmd = &cobra.Command{
 
 		it := issuetracking.GetClient()
 		issueKey := issuetracking.GetIssueKeyFromBranchName(branchName)
-		issue := it.Issue(issueKey)
+		issue, err := it.Issue(issueKey)
+
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
 
 		if success {
 			fmt.Printf("Merged %v into %v\n", branchName, pr.Base)

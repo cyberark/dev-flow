@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/spf13/cobra"
 
@@ -25,7 +26,13 @@ var reviseCmd = &cobra.Command{
 		// TODO: This won't work when the issue tracker != the scm
 		// for example Jira vs GitHub
 		it := issuetracking.GetClient()
-		issue := it.Issue(issueKey)
+		issue, err := it.Issue(issueKey)
+
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+		
 		it.AssignIssue(issue, pr.Creator)
 
 		chat := chat.GetClient()
