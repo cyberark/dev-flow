@@ -103,6 +103,8 @@ var completeCmd = &cobra.Command{
 }
 
 func init() {
+	rootCmd.AddCommand(completeCmd)
+	
 	completeCmd.Flags().StringVarP(
 		&MergeMethod,
 		"merge-method",
@@ -110,6 +112,4 @@ func init() {
 		"rebase",
 		"Merge method to use (rebase, squash, or merge). Defaults to rebase.",
 	)
-	
-	rootCmd.AddCommand(completeCmd)
 }

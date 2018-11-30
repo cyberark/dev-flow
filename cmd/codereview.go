@@ -20,6 +20,8 @@ var codereviewCmd = &cobra.Command{
 	Short:   "Creates a pull request and assigns a reviewer.",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
+		validateLinkType()
+		
 		reviewer := args[0]
 
 		branchName := versioncontrol.GetClient().CurrentBranch()
@@ -57,7 +59,7 @@ var codereviewCmd = &cobra.Command{
 		if pr != nil {
 			fmt.Println("Pull request already exists for branch", branchName)
 		} else {
-			pr = scm.CreatePullRequest(issue)
+			pr = scm.CreatePullRequest(issue, LinkType)
 		}
 
 		scm.AssignPullRequestReviewer(pr, reviewer)
@@ -79,14 +81,13 @@ var codereviewCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(codereviewCmd)
+	
+	codereviewCmd.Flags().StringVarP(
+		&LinkType,
+		"link-type",
+		"l",
+		"close",
+		"The type of link to create with the associated issue.",
+	)
 
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// codereviewCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// codereviewCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

@@ -6,7 +6,7 @@ import (
 
 type SourceControlManagementClient interface {
 	GetPullRequest(string) *PullRequest
-	CreatePullRequest(common.Issue) *PullRequest
+	CreatePullRequest(common.Issue, string) *PullRequest
 	AssignPullRequestReviewer(*PullRequest, string)
 	MergePullRequest(*PullRequest, string) bool
 }
