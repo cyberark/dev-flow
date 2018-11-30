@@ -38,8 +38,6 @@ var labelCmd = &cobra.Command{
 		}
 		
 		it.AddIssueLabel(issue, label)
-
-		fmt.Println(fmt.Sprintf("Added label '%s' to issue %s", label, IssueKey))
 	},
 }
 
