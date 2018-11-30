@@ -2,8 +2,8 @@ package cmd
 
 import (
 	"fmt"
-	"os"
-
+	"log"
+	
 	"github.com/spf13/cobra"
 
 	"github.com/cyberark/dev-flow/issuetracking"
@@ -27,15 +27,14 @@ var labelCmd = &cobra.Command{
 		}
 
 		if IssueKey == "" {
-			fmt.Println("Unable to find issue for key: %s", IssueKey)
+			log.Fatalln("No issue key provided")
 		}
 		
 		it := issuetracking.GetClient()
 		issue, err := it.Issue(IssueKey)
 
 		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
+			log.Fatalln(err)
 		}
 		
 		it.AddIssueLabel(issue, label)

@@ -1,8 +1,7 @@
 package cmd
 
 import (
-	"fmt"
-	"os"
+	"log"
 	
 	"github.com/spf13/cobra"
 
@@ -22,8 +21,7 @@ var issueCmd = &cobra.Command{
 		issue, err := it.Issue(issueKey)
 
 		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
+			log.Fatalln(err)
 		}
 
 		util.Openbrowser(*issue.URL)

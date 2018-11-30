@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -27,8 +28,8 @@ var completeCmd = &cobra.Command{
 		}
 
 		if !validMergeMethods[MergeMethod] {
-			fmt.Printf("Invalid merge method: %s. Must be rebase, squash, or merge.", MergeMethod)
-			os.Exit(1)
+			err := fmt.Sprintf("Invalid merge method: %s. Must be rebase, squash, or merge.", MergeMethod)
+			log.Fatalln(err)
 		}
 		
 		vc := versioncontrol.GetClient()
@@ -38,13 +39,13 @@ var completeCmd = &cobra.Command{
 		pr := scm.GetPullRequest(branchName)
 
 		if pr == nil {
-			fmt.Println("No pull request found for branch", branchName)
-			os.Exit(1)
+			err := fmt.Sprintf("No pull request found for branch %s", branchName)
+			log.Fatalln(err)
 		}
 
 		if !pr.Mergeable {
-			fmt.Println("Pull request not mergeable. Check for conflicts.")
-			os.Exit(1)
+			err := "Pull request not mergeable. Check for conflicts."
+			log.Fatalln(err)
 		}
 
 		if !util.Confirm(fmt.Sprintf("Are you sure you want to merge %v into %v?", branchName, pr.Base)) {
@@ -59,15 +60,14 @@ var completeCmd = &cobra.Command{
 		issue, err := it.Issue(issueKey)
 
 		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
+			log.Fatalln(err)
 		}
 
 		if success {
 			fmt.Printf("Merged %v into %v\n", branchName, pr.Base)
 		} else {
-			fmt.Println("Merge failed.")
-			os.Exit(1)
+			err := "Merge failed"
+			log.Fatalln(err)
 		}
 
 		it.AssignIssue(issue, pr.Creator)

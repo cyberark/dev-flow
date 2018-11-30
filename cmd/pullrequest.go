@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"fmt"
-	"os"
+	"log"
 
 	"github.com/spf13/cobra"
 
@@ -29,8 +29,7 @@ var pullrequestCmd = &cobra.Command{
 			issue, err := issuetracking.GetClient().Issue(issueKey)
 
 			if err != nil {
-				fmt.Println(err)
-				os.Exit(1)
+				log.Fatalln(err)
 			}
 			
 			pr = scm.CreatePullRequest(issue)

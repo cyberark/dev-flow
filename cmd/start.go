@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"fmt"
-	"os"
+	"log"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -22,8 +22,7 @@ var startCmd = &cobra.Command{
 		issue, err := it.Issue(issueKey)
 
 		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
+			log.Fatalln(err)
 		}
 
 		user := it.GetCurrentUser()
@@ -36,8 +35,7 @@ var startCmd = &cobra.Command{
 			err := it.AddIssueLabel(issue, progressLabelName)
 
 			if err != nil {
-				fmt.Println(err)
-				os.Exit(1)
+				log.Fatalln(err)
 			}
 
 			fmt.Printf("Added label '%v' to issue %v.\n", progressLabelName, *issue.Number)
