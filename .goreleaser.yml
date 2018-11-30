@@ -16,6 +16,7 @@ builds:
   goarch:
   - amd64
   ldflags: []
+  main: ./main.go
 
 archive:
   name_template: "{{.ProjectName}}-{{.Os}}-{{.Arch}}"
@@ -36,7 +37,7 @@ brew:
     bin.install "dev-flow"
   test: |
     system "#{bin}/dev-flow", "-h"
-  
+
   github:
     owner: cyberark
     name: homebrew-tools
@@ -57,3 +58,4 @@ nfpm:
 
 release:
   disable: true
+  prerelease: auto
