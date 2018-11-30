@@ -14,6 +14,8 @@ import (
 	"github.com/cyberark/dev-flow/versioncontrol"
 )
 
+var LinkTypeCodereview string = "close"
+
 var codereviewCmd = &cobra.Command{
 	Use:     "codereview [reviewer]",
 	Aliases: []string{"cr"},
@@ -22,7 +24,7 @@ var codereviewCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		util.ValidateStringParam(
 			"link-type",
-			LinkType,
+			LinkTypeCodereview,
 			[]string{ "close", "connect" },
 		)
 		
@@ -63,7 +65,7 @@ var codereviewCmd = &cobra.Command{
 		if pr != nil {
 			fmt.Println("Pull request already exists for branch", branchName)
 		} else {
-			pr = scm.CreatePullRequest(issue, LinkType)
+			pr = scm.CreatePullRequest(issue, LinkTypeCodereview)
 		}
 
 		scm.AssignPullRequestReviewer(pr, reviewer)
@@ -87,11 +89,10 @@ func init() {
 	rootCmd.AddCommand(codereviewCmd)
 	
 	codereviewCmd.Flags().StringVarP(
-		&LinkType,
+		&LinkTypeCodereview,
 		"link-type",
 		"l",
 		"close",
 		"The type of link to create with the associated issue.",
 	)
-
 }

@@ -12,7 +12,7 @@ import (
 	"github.com/cyberark/dev-flow/versioncontrol"
 )
 
-var LinkType string = "close"
+var LinkTypePullrequest string = "close"
 
 var pullrequestCmd = &cobra.Command{
 	Use:     "pullrequest",
@@ -21,7 +21,7 @@ var pullrequestCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		util.ValidateStringParam(
 			"link-type",
-			LinkType,
+			LinkTypePullrequest,
 			[]string{ "close", "connect" },
 		)
 		
@@ -40,7 +40,7 @@ var pullrequestCmd = &cobra.Command{
 				log.Fatalln(err)
 			}
 			
-			pr = scm.CreatePullRequest(issue, LinkType)
+			pr = scm.CreatePullRequest(issue, LinkTypePullrequest)
 		}
 
 		if util.Confirm("Open pull request in browser?") {
@@ -53,7 +53,7 @@ func init() {
 	rootCmd.AddCommand(pullrequestCmd)
 	
 	pullrequestCmd.Flags().StringVarP(
-		&LinkType,
+		&LinkTypePullrequest,
 		"link-type",
 		"l",
 		"close",
