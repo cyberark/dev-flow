@@ -3,24 +3,20 @@ package util
 import (
 	"fmt"
 	"log"
-
-	"strings"
 )
 
 func ValidateStringParam(paramName string, paramValue string, validValues []string) {
-	valueFound := false
-
-	for i := 0; i < len(validValues); i++ {
-		valueFound = (paramValue == validValues[i])
-		if valueFound { break }
+	validValueMap := make(map[string]bool)
+	for _, validValue := range validValues {
+		validValueMap[validValue] = true
 	}
-
-	if !valueFound {
+	
+	if !validValueMap[paramValue] {
 		err := fmt.Sprintf(
-			"Invalid value '%s' for param %s. Must be one of [%s].",
+			"Invalid value '%s' for param %s. Must be one of %v.",
 			paramValue,
 			paramName,
-			strings.Join(validValues, ", "),
+			validValues,
 		)
 		log.Fatalln(err)		
 	}
