@@ -42,6 +42,8 @@ var labelCmd = &cobra.Command{
 }
 
 func init() {
+	rootCmd.AddCommand(labelCmd)
+	
 	labelCmd.Flags().StringVarP(
 		&IssueKey,
 		"issue-key",
@@ -49,6 +51,4 @@ func init() {
 		"",
 		"The key of the issue to which the label should be added.",
 	)
-	
-	rootCmd.AddCommand(labelCmd)
 }

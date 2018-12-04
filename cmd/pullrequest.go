@@ -12,11 +12,19 @@ import (
 	"github.com/cyberark/dev-flow/versioncontrol"
 )
 
+var LinkTypePullrequest string = "close"
+
 var pullrequestCmd = &cobra.Command{
 	Use:     "pullrequest",
 	Aliases: []string{"pr"},
 	Short:   "Creates a pull request for your branch.",
 	Run: func(cmd *cobra.Command, args []string) {
+		util.ValidateStringParam(
+			"link-type",
+			LinkTypePullrequest,
+			[]string{ "close", "connect" },
+		)
+		
 		branchName := versioncontrol.GetClient().CurrentBranch()
 
 		scm := scm.GetClient()
@@ -32,7 +40,7 @@ var pullrequestCmd = &cobra.Command{
 				log.Fatalln(err)
 			}
 			
-			pr = scm.CreatePullRequest(issue)
+			pr = scm.CreatePullRequest(issue, LinkTypePullrequest)
 		}
 
 		if util.Confirm("Open pull request in browser?") {
@@ -43,4 +51,12 @@ var pullrequestCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(pullrequestCmd)
+	
+	pullrequestCmd.Flags().StringVarP(
+		&LinkTypePullrequest,
+		"link-type",
+		"l",
+		"close",
+		"The type of link to create with the associated issue.",
+	)
 }

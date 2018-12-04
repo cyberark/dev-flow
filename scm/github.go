@@ -69,12 +69,12 @@ func (gh GitHub) GetPullRequest(branchName string) *PullRequest {
 	return pr
 }
 
-func (gh GitHub) CreatePullRequest(issue common.Issue) *PullRequest {
+func (gh GitHub) CreatePullRequest(issue common.Issue, linkType string) *PullRequest {
 	repo := versioncontrol.GetClient().Repo()
 
 	base := "master"
 	head := issue.BranchName()
-	body := fmt.Sprintf("Closes #%v", *issue.Number)
+	body := fmt.Sprintf("%s #%v", linkType, *issue.Number)
 
 	ghnpr := &github.NewPullRequest{
 		Base:  &base,
