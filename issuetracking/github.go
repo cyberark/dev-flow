@@ -111,7 +111,7 @@ func (gh GitHub) AssignIssue(issue common.Issue, login string) {
 
 func (gh GitHub) AddIssueLabel(issue common.Issue, labelName string) {
 	if labelName == "" {
-		log.Println("Invalid label:", labelName)
+		log.Println("Can not apply blank label.")
 		return
 	}
 
@@ -143,9 +143,9 @@ func (gh GitHub) AddIssueLabel(issue common.Issue, labelName string) {
 	msg := ""
 
 	if err != nil {
-		msg = fmt.Sprintf("Failed to add label '%s' to issue %d", labelName, *issue.Number)
+		msg = fmt.Sprintf("Failed to add label '%s' to issue %d.", labelName, *issue.Number)
 	} else {
-		msg = fmt.Sprintf("Added label '%s' to issue %d", labelName, *issue.Number)
+		msg = fmt.Sprintf("Added label '%s' to issue %d.", labelName, *issue.Number)
 	}
 
 	log.Println(msg)
@@ -153,7 +153,7 @@ func (gh GitHub) AddIssueLabel(issue common.Issue, labelName string) {
 
 func (gh GitHub) RemoveIssueLabel(issue common.Issue, labelName string) {
 	if labelName == "" {
-		log.Println("Invalid label:", labelName)
+		log.Println("Can not apply blank label.")
 		return
 	}
 
@@ -184,9 +184,9 @@ func (gh GitHub) RemoveIssueLabel(issue common.Issue, labelName string) {
 	msg := ""
 
 	if err != nil {
-		msg = fmt.Sprintf("Failed to remove label '%s' from issue %d", labelName, *issue.Number)
+		msg = fmt.Sprintf("Failed to remove label '%s' from issue %d.", labelName, *issue.Number)
 	} else {
-		msg = fmt.Sprintf("Removed label '%s' from issue %d", labelName, *issue.Number)
+		msg = fmt.Sprintf("Removed label '%s' from issue %d.", labelName, *issue.Number)
 	}
 
 	log.Println(msg)
