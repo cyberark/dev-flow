@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"log"
 	"strconv"
 
 	"github.com/google/go-github/github"
@@ -108,20 +109,30 @@ func (gh GitHub) AssignIssue(issue common.Issue, login string) {
 	}
 }
 
-func (gh GitHub) AddIssueLabel(issue common.Issue, labelName string) error {
-	repo := versioncontrol.Git{}.Repo()
+func (gh GitHub) AddIssueLabel(issue common.Issue, labelName string) {
+	if labelName == "" {
+		log.Println("Invalid label:", labelName)
+		return
+	}
 
-	client := gh.client()
+	if issue.HasLabel(labelName) {
+		msg := fmt.Sprintf("Issue %d already has label '%s'.", *issue.Number, labelName)
+		log.Println(msg)
+		return
+	}
 
 	_, err := gh.getLabel(labelName)
 
 	if err != nil {
-		return errors.New(fmt.Sprintf("Label '%v' does not exist.", labelName))
+		msg := fmt.Sprintf("Unable to find label '%s'. Please make sure it exists.", labelName)
+		log.Println(msg)
+		return
 	}
 
+	repo := versioncontrol.Git{}.Repo()
 	labels := []string{labelName}
 
-	_, _, err = client.Issues.AddLabelsToIssue(
+	_, _, err = gh.client().Issues.AddLabelsToIssue(
 		context.Background(),
 		repo.Owner,
 		repo.Name,
@@ -129,21 +140,40 @@ func (gh GitHub) AddIssueLabel(issue common.Issue, labelName string) error {
 		labels,
 	)
 
+	msg := ""
+
 	if err != nil {
-		return err
+		msg = fmt.Sprintf("Failed to add label '%s' to issue %d", labelName, *issue.Number)
+	} else {
+		msg = fmt.Sprintf("Added label '%s' to issue %d", labelName, *issue.Number)
 	}
 
-	fmt.Println("Added label '%s' to issue %d", labelName, issue.Number)
-
-	return nil
+	log.Println(msg)
 }
 
 func (gh GitHub) RemoveIssueLabel(issue common.Issue, labelName string) {
+	if labelName == "" {
+		log.Println("Invalid label:", labelName)
+		return
+	}
+
+	if !issue.HasLabel(labelName) {
+		msg := fmt.Sprintf("Issue %d does not have label '%s'.", *issue.Number, labelName)
+		log.Println(msg)
+		return
+	}
+	
+	_, err := gh.getLabel(labelName)
+
+	if err != nil {
+		msg := fmt.Sprintf("Unable to find label '%s'. Please make sure it exists.", labelName)
+		log.Println(msg)
+		return
+	}
+
 	repo := versioncontrol.Git{}.Repo()
-
-	client := gh.client()
-
-	_, err := client.Issues.RemoveLabelForIssue(
+	
+	_, err = gh.client().Issues.RemoveLabelForIssue(
 		context.Background(),
 		repo.Owner,
 		repo.Name,
@@ -151,11 +181,15 @@ func (gh GitHub) RemoveIssueLabel(issue common.Issue, labelName string) {
 		labelName,
 	)
 
+	msg := ""
+
 	if err != nil {
-		panic(err)
+		msg = fmt.Sprintf("Failed to remove label '%s' from issue %d", labelName, *issue.Number)
+	} else {
+		msg = fmt.Sprintf("Removed label '%s' from issue %d", labelName, *issue.Number)
 	}
 
-	fmt.Println("Removed label '%s' from issue %d", labelName, issue.Number)
+	log.Println(msg)
 }
 
 func (gh GitHub) getLabel(name string) (*github.Label, error) {

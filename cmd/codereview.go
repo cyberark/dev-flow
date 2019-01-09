@@ -40,21 +40,8 @@ var codereviewCmd = &cobra.Command{
 			log.Fatalln(err)
 		}
 
-		progressLabelName := viper.GetString("labels.start")
-
-		if progressLabelName != "" && issue.HasLabel(progressLabelName) {
-			it.RemoveIssueLabel(issue, progressLabelName)
-		}
-
-		reviewLabelName := viper.GetString("labels.codereview")
-
-		if reviewLabelName != "" {
-			err := it.AddIssueLabel(issue, reviewLabelName)
-
-			if err != nil {
-				log.Fatalln(err)
-			}
-		}
+		it.RemoveIssueLabel(issue, viper.GetString("labels.start"))
+		it.AddIssueLabel(issue, viper.GetString("labels.codereview"))
 
 		scm := scm.GetClient()
 		pr := scm.GetPullRequest(branchName)
