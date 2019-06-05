@@ -156,13 +156,6 @@ func (gh GitHub) RemoveIssueLabel(issue common.Issue, labelName string) {
 		return
 	}
 	
-	_, err := gh.getLabel(labelName)
-
-	if err != nil {
-		log.Printf("Unable to find label '%s'. Please make sure it exists.", labelName)
-		return
-	}
-
 	repo := versioncontrol.Git{}.Repo()
 	
 	_, err = gh.client().Issues.RemoveLabelForIssue(
