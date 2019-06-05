@@ -152,7 +152,7 @@ func (gh GitHub) RemoveIssueLabel(issue common.Issue, labelName string) {
 	}
 
 	if !issue.HasLabel(labelName) {
-		log.Printf("Issue %d does not have label '%s'.", *issue.Number, labelName)
+		// No need for logging here, issue is already in desired state.
 		return
 	}
 	
