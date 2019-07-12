@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	log.SetPrefix("LOG: ")
+	log.SetPrefix("INFO: ")
 	log.SetFlags(log.Llongfile)
 	
 	cmd.Execute()

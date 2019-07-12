@@ -29,7 +29,11 @@ var startCmd = &cobra.Command{
 		it.AssignIssue(issue, user)
 		fmt.Printf("Assigned issue %v to user %v.\n", *issue.Number, user)
 
-		it.AddIssueLabel(issue, viper.GetString("labels.start"))
+		err = it.AddIssueLabel(issue, viper.GetString("labels.start"))
+
+		if err != nil {
+			log.Println(err)
+		}
 
 		vc := versioncontrol.GetClient()
 

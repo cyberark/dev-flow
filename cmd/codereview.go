@@ -40,8 +40,17 @@ var codereviewCmd = &cobra.Command{
 			log.Fatalln(err)
 		}
 
-		it.RemoveIssueLabel(issue, viper.GetString("labels.start"))
-		it.AddIssueLabel(issue, viper.GetString("labels.codereview"))
+		err = it.RemoveIssueLabel(issue, viper.GetString("labels.start"))
+
+		if err != nil {
+			log.Println(err)
+		}
+		
+		err = it.AddIssueLabel(issue, viper.GetString("labels.codereview"))
+
+		if err != nil {
+			log.Println(err)
+		}
 
 		scm := scm.GetClient()
 		pr := scm.GetPullRequest(branchName)

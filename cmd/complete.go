@@ -76,8 +76,17 @@ var completeCmd = &cobra.Command{
 			)
 		}
 
-		it.RemoveIssueLabel(issue, viper.GetString("labels.codereview"))
-		it.AddIssueLabel(issue, viper.GetString("labels.complete"))
+		err = it.RemoveIssueLabel(issue, viper.GetString("labels.codereview"))
+
+		if err != nil {
+			log.Println(err)
+		}
+		
+		err = it.AddIssueLabel(issue, viper.GetString("labels.complete"))
+
+		if err != nil {
+			log.Println(err)
+		}
 
 		vc.CheckoutAndPull(pr.Base)
 
