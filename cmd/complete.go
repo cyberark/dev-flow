@@ -76,20 +76,16 @@ var completeCmd = &cobra.Command{
 			)
 		}
 
-		reviewLabelName := viper.GetString("labels.codereview")
+		err = it.RemoveIssueLabel(issue, viper.GetString("labels.codereview"))
 
-		if reviewLabelName != "" && issue.HasLabel(reviewLabelName) {
-			it.RemoveIssueLabel(issue, reviewLabelName)
+		if err != nil {
+			log.Println(err)
 		}
+		
+		err = it.AddIssueLabel(issue, viper.GetString("labels.complete"))
 
-		completeLabelName := viper.GetString("labels.complete")
-
-		if completeLabelName != "" && !issue.HasLabel(completeLabelName) {
-			err := it.AddIssueLabel(issue, completeLabelName)
-
-			if err != nil {
-				log.Fatalln(err)
-			}
+		if err != nil {
+			log.Println(err)
 		}
 
 		vc.CheckoutAndPull(pr.Base)

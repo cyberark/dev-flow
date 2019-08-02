@@ -37,7 +37,11 @@ var labelCmd = &cobra.Command{
 			log.Fatalln(err)
 		}
 		
-		it.AddIssueLabel(issue, label)
+		err = it.AddIssueLabel(issue, label)
+
+		if err != nil {
+			log.Println(err)
+		}
 	},
 }
 
