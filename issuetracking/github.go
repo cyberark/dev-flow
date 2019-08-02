@@ -110,7 +110,7 @@ func (gh GitHub) AssignIssue(issue common.Issue, login string) {
 
 func (gh GitHub) AddIssueLabel(issue common.Issue, labelName string) error {
 	if labelName == "" {
-		return errors.New("Unable to apply blank label.")
+		return errors.New("Unable to add blank label.")
 	}
 
 	if issue.HasLabel(labelName) {
@@ -143,7 +143,7 @@ func (gh GitHub) AddIssueLabel(issue common.Issue, labelName string) error {
 
 func (gh GitHub) RemoveIssueLabel(issue common.Issue, labelName string) error {
 	if labelName == "" {
-		return errors.New("Unable to apply blank label.")
+		return errors.New("Unable to remove blank label.")
 	}
 
 	if !issue.HasLabel(labelName) {
