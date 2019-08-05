@@ -1,7 +1,6 @@
 package issuetracking
 
 import (
-	"context"
 	"errors"
 	"fmt"
 	"strconv"
@@ -15,13 +14,35 @@ import (
 
 type GitHub struct{}
 
-func (gh GitHub) client() *github.Client {
+func newGitHubClient() services.GitHub {
 	return services.GitHub{}.GetClient()
 }
 
+func toCommonIssue(ghIssue *github.Issue) common.Issue {
+	var assignee *string
+
+	if ghIssue.Assignee != nil {
+		assignee = ghIssue.Assignee.Login
+	}
+
+	ghLabels := ghIssue.Labels
+	labels := make([]string, len(ghLabels))
+
+	for i, ghLabel := range ghLabels {
+		labels[i] = *ghLabel.Name
+	}
+
+	return common.Issue{
+		URL:      ghIssue.HTMLURL,
+		Number:   ghIssue.Number,
+		Title:    ghIssue.Title,
+		Assignee: assignee,
+		Labels:   labels,
+	}
+}
+
 func (gh GitHub) getUser(username string) *github.User {
-	client := gh.client()
-	ghUser, _, err := client.Users.Get(context.Background(), username)
+	ghUser, err := newGitHubClient().GetUser(username)
 
 	if err != nil {
 		panic(err)
@@ -41,12 +62,7 @@ func (gh GitHub) GetUserRealName(username string) string {
 func (gh GitHub) Issues() []common.Issue {
 	repo := versioncontrol.Git{}.Repo()
 
-	ghIssues, _, err := gh.client().Issues.ListByRepo(
-		context.Background(),
-		repo.Owner,
-		repo.Name,
-		nil,
-	)
+	ghIssues, err := newGitHubClient().GetIssues(repo)
 
 	if err != nil {
 		panic(err)
@@ -56,7 +72,7 @@ func (gh GitHub) Issues() []common.Issue {
 
 	for _, ghIssue := range ghIssues {
 		if ghIssue.PullRequestLinks == nil {
-			issue := services.GitHub{}.ToCommonIssue(ghIssue)
+			issue := toCommonIssue(ghIssue)
 			issues = append(issues, issue)
 		}
 	}
@@ -67,42 +83,27 @@ func (gh GitHub) Issues() []common.Issue {
 func (gh GitHub) Issue(issueKey string) (common.Issue, error) {
 	repo := versioncontrol.Git{}.Repo()
 
-	client := gh.client()
-
 	issueNum, err := strconv.Atoi(issueKey)
 
 	if err != nil {
 		panic(err)
 	}
 
-	ghIssue, _, err := client.Issues.Get(
-		context.Background(),
-		repo.Owner,
-		repo.Name,
-		issueNum,
-	)
+	ghIssue, err := newGitHubClient().GetIssue(repo, issueNum)
 
 	if err != nil {
 		return common.Issue{},
 		errors.New(fmt.Sprintf("Could not find issue number %d", issueNum))
 	}
 
-	return services.GitHub{}.ToCommonIssue(ghIssue), nil
+	return toCommonIssue(ghIssue), nil
 }
 
 func (gh GitHub) AssignIssue(issue common.Issue, login string) {
 	repo := versioncontrol.Git{}.Repo()
 
-	client := gh.client()
-
-	_, _, err := client.Issues.AddAssignees(
-		context.Background(),
-		repo.Owner,
-		repo.Name,
-		*issue.Number,
-		[]string{login},
-	)
-
+	err := newGitHubClient().AssignIssue(repo, *issue.Number, login)
+	
 	if err != nil {
 		panic(err)
 	}
@@ -124,16 +125,9 @@ func (gh GitHub) AddIssueLabel(issue common.Issue, labelName string) error {
 	}
 
 	repo := versioncontrol.Git{}.Repo()
-	labels := []string{labelName}
 
-	_, _, err = gh.client().Issues.AddLabelsToIssue(
-		context.Background(),
-		repo.Owner,
-		repo.Name,
-		*issue.Number,
-		labels,
-	)
-
+	err = newGitHubClient().AddLabelToIssue(repo, *issue.Number, labelName)
+	
 	if err != nil {
 		return fmt.Errorf("Failed to add label '%s' to issue %d: %s", labelName, *issue.Number, err)
 	}
@@ -152,13 +146,7 @@ func (gh GitHub) RemoveIssueLabel(issue common.Issue, labelName string) error {
 	
 	repo := versioncontrol.Git{}.Repo()
 	
-	_, err := gh.client().Issues.RemoveLabelForIssue(
-		context.Background(),
-		repo.Owner,
-		repo.Name,
-		*issue.Number,
-		labelName,
-	)
+	err := newGitHubClient().RemoveLabelForIssue(repo, *issue.Number, labelName)
 
 	if err != nil {
 		return fmt.Errorf("Failed to remove label '%s' from issue %d: %s", labelName, *issue.Number, err)
@@ -170,18 +158,11 @@ func (gh GitHub) RemoveIssueLabel(issue common.Issue, labelName string) error {
 func (gh GitHub) getLabel(name string) (*github.Label, error) {
 	repo := versioncontrol.GetClient().Repo()
 
-	client := gh.client()
-
-	ghl, _, err := client.Issues.GetLabel(
-		context.Background(),
-		repo.Owner,
-		repo.Name,
-		name,
-	)
+	ghLabel, err := newGitHubClient().GetLabel(repo, name)
 
 	if err != nil {
 		return nil, err
 	}
 
-	return ghl, nil
+	return ghLabel, nil
 }
