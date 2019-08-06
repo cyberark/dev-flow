@@ -6,14 +6,14 @@ import (
 	"github.com/google/go-github/github"
 
 	"github.com/cyberark/dev-flow/common"
-	"github.com/cyberark/dev-flow/services"
+	"github.com/cyberark/dev-flow/service"
 	"github.com/cyberark/dev-flow/versioncontrol"
 )
 
 type GitHub struct{}
 
-func newGitHubClient() services.GitHub {
-	return services.GitHub{}.GetClient()
+func newGitHubClient() service.GitHub {
+	return service.GitHub{}.GetClient()
 }
 
 func (gh GitHub) GetPullRequest(branchName string) *PullRequest {
