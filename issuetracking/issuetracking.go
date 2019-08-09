@@ -8,8 +8,8 @@ import (
 )
 
 type IssueTrackingClient interface {
-	GetCurrentUser() string
-	GetUserRealName(string) string
+	GetCurrentUser() (string, error)
+	GetUserRealName(string) (string, error)
 	Issues() []common.Issue
 	Issue(string) (common.Issue, error)
 	AssignIssue(common.Issue, string)
@@ -19,7 +19,7 @@ type IssueTrackingClient interface {
 
 func GetClient() IssueTrackingClient {
 	return GitHub{
-		GitHubClient: service.GitHub{}.GetClient(),
+		GitHubService: service.GitHub{},
 	}
 }
 

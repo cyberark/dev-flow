@@ -1,6 +1,7 @@
 package issuetracking
 
 import (
+	"errors"
 	"testing"
 
 	"github.com/cyberark/dev-flow/service"
@@ -8,12 +9,28 @@ import (
 
 func TestGetCurrentUser(t *testing.T) {
 	client := GitHub{
-		GitHubClient: service.GitHubMock{}.GetClient(),
+		GitHubService: service.GitHubMock{},
 	}
 
-	userLogin := client.GetCurrentUser()
+	userLogin, _ := client.GetCurrentUser()
 
 	if userLogin != "octocat" {
-		t.Errorf("Expected: %v, got: %v", "octocat", userLogin)
+		t.Errorf("expected %v, got: %v", "octocat", userLogin)
+	}
+}
+
+func TestGetCurrentUserErr(t *testing.T) {
+	service := service.GitHubMock{
+		Error: errors.New("an error"),
+	}
+	
+	client := GitHub{
+		GitHubService: service,
+	}
+
+	_, err := client.GetCurrentUser()
+
+	if err == nil {
+		t.Errorf("expected error")
 	}
 }

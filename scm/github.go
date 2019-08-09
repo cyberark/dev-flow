@@ -13,7 +13,7 @@ import (
 type GitHub struct{}
 
 func newGitHubClient() service.GitHub {
-	return service.GitHub{}.GetClient()
+	return service.GitHub{}
 }
 
 func (gh GitHub) GetPullRequest(branchName string) *PullRequest {

@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -66,9 +67,23 @@ var codereviewCmd = &cobra.Command{
 		chat := chat.GetClient()
 
 		if chat != nil {
+			userLogin, err := it.GetCurrentUser()
+
+			if err != nil {
+				fmt.Println(err)
+				os.Exit(1)
+			}
+
+			userRealName, err := it.GetUserRealName(reviewer)
+
+			if err != nil {
+				fmt.Println(err)
+				os.Exit(1)
+			}
+			
 			chat.DirectMessage(
-				it.GetUserRealName(reviewer),
-				fmt.Sprintf("%v has requested your review on %v", it.GetCurrentUser(), pr.URL),
+				userRealName,
+				fmt.Sprintf("%v has requested your review on %v", userLogin, pr.URL),
 			)
 		}
 

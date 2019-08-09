@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -25,9 +26,15 @@ var startCmd = &cobra.Command{
 			log.Fatalln(err)
 		}
 
-		user := it.GetCurrentUser()
-		it.AssignIssue(issue, user)
-		fmt.Printf("Assigned issue %v to user %v.\n", *issue.Number, user)
+		userLogin, err := it.GetCurrentUser()
+
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+		
+		it.AssignIssue(issue, userLogin)
+		fmt.Printf("Assigned issue %v to user %v.\n", *issue.Number, userLogin)
 
 		err = it.AddIssueLabel(issue, viper.GetString("labels.start"))
 

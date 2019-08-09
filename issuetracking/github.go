@@ -13,7 +13,7 @@ import (
 )
 
 type GitHub struct {
-	GitHubClient service.GitHubClient
+	GitHubService service.GitHubService
 }
 
 func toCommonIssue(ghIssue *github.Issue) common.Issue {
@@ -39,28 +39,35 @@ func toCommonIssue(ghIssue *github.Issue) common.Issue {
 	}
 }
 
-func (gh GitHub) getUser(username string) *github.User {
-	ghUser, err := gh.GitHubClient.GetUser(username)
+func (gh GitHub) getUser(username string) (*github.User, error) {
+	ghUser, err := gh.GitHubService.GetUser(username)
+	return ghUser, err
+}
+
+func (gh GitHub) GetCurrentUser() (string, error) {
+	ghUser, err := gh.getUser("")
 
 	if err != nil {
-		panic(err)
+		return "", err
 	}
-
-	return ghUser
+	
+	return *ghUser.Login, nil
 }
 
-func (gh GitHub) GetCurrentUser() string {
-	return *gh.getUser("").Login
-}
+func (gh GitHub) GetUserRealName(username string) (string, error) {
+	ghUser, err := gh.getUser("")
 
-func (gh GitHub) GetUserRealName(username string) string {
-	return *gh.getUser(username).Name
+	if err != nil {
+		return "", err
+	}
+	
+	return *ghUser.Name, nil
 }
 
 func (gh GitHub) Issues() []common.Issue {
 	repo := versioncontrol.Git{}.Repo()
 
-	ghIssues, err := gh.GitHubClient.GetIssues(repo)
+	ghIssues, err := gh.GitHubService.GetIssues(repo)
 
 	if err != nil {
 		panic(err)
@@ -87,7 +94,7 @@ func (gh GitHub) Issue(issueKey string) (common.Issue, error) {
 		panic(err)
 	}
 
-	ghIssue, err := gh.GitHubClient.GetIssue(repo, issueNum)
+	ghIssue, err := gh.GitHubService.GetIssue(repo, issueNum)
 
 	if err != nil {
 		return common.Issue{},
@@ -100,7 +107,7 @@ func (gh GitHub) Issue(issueKey string) (common.Issue, error) {
 func (gh GitHub) AssignIssue(issue common.Issue, login string) {
 	repo := versioncontrol.Git{}.Repo()
 
-	err := gh.GitHubClient.AssignIssue(repo, *issue.Number, login)
+	err := gh.GitHubService.AssignIssue(repo, *issue.Number, login)
 	
 	if err != nil {
 		panic(err)
@@ -124,7 +131,7 @@ func (gh GitHub) AddIssueLabel(issue common.Issue, labelName string) error {
 
 	repo := versioncontrol.Git{}.Repo()
 
-	err = gh.GitHubClient.AddLabelToIssue(repo, *issue.Number, labelName)
+	err = gh.GitHubService.AddLabelToIssue(repo, *issue.Number, labelName)
 	
 	if err != nil {
 		return fmt.Errorf("Failed to add label '%s' to issue %d: %s", labelName, *issue.Number, err)
@@ -144,7 +151,7 @@ func (gh GitHub) RemoveIssueLabel(issue common.Issue, labelName string) error {
 	
 	repo := versioncontrol.Git{}.Repo()
 	
-	err := gh.GitHubClient.RemoveLabelForIssue(repo, *issue.Number, labelName)
+	err := gh.GitHubService.RemoveLabelForIssue(repo, *issue.Number, labelName)
 
 	if err != nil {
 		return fmt.Errorf("Failed to remove label '%s' from issue %d: %s", labelName, *issue.Number, err)
@@ -156,7 +163,7 @@ func (gh GitHub) RemoveIssueLabel(issue common.Issue, labelName string) error {
 func (gh GitHub) getLabel(name string) (*github.Label, error) {
 	repo := versioncontrol.GetClient().Repo()
 
-	ghLabel, err := gh.GitHubClient.GetLabel(repo, name)
+	ghLabel, err := gh.GitHubService.GetLabel(repo, name)
 
 	if err != nil {
 		return nil, err
