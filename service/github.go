@@ -39,14 +39,14 @@ func (gh GitHub) GetClient() GitHub {
 	return GitHub{}
 }
 
-func (gh GitHub) GetUser(username string) (*github.User, error) {
-	ghUser, _, err := newClient().Users.Get(context.Background(), username)
+func (gh GitHub) GetUser(login string) (*github.User, error) {
+	user, _, err := newClient().Users.Get(context.Background(), login)
 
 	if err != nil {
 		return nil, err
 	}
 
-	return ghUser, nil
+	return user, nil
 }
 
 func (gh GitHub) GetIssues(repo versioncontrol.Repo) ([]*github.Issue, error) {
