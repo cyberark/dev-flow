@@ -3,20 +3,13 @@ package issuetracking
 import (
 	"testing"
 
-	"github.com/cyberark/dev-flow/testutils"
-	"github.com/jarcoal/httpmock"
+	"github.com/cyberark/dev-flow/service"
 )
 
 func TestGetCurrentUser(t *testing.T) {
-	httpmock.Activate()
-	defer httpmock.DeactivateAndReset()
-
-	response := testutils.LoadJsonFile("testdata/github_user.json")
-
-	httpmock.RegisterResponder("GET", "https://api.github.com/user",
-		httpmock.NewStringResponder(200, response))
-
-	client := GitHub{}
+	client := GitHub{
+		GitHubClient: service.GitHubMock{}.GetClient(),
+	}
 
 	userLogin := client.GetCurrentUser()
 

@@ -6,7 +6,7 @@ import (
 	"os"
 )
 
-func LoadJsonFile(path string) string {
+func LoadJsonFile(path string) []byte {
 	file, err := os.Open(path)
 	defer file.Close()
 	
@@ -16,5 +16,5 @@ func LoadJsonFile(path string) string {
 
 	bytes, _ := ioutil.ReadAll(file)
 	
-	return string(bytes)
+	return bytes
 }
