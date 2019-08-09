@@ -4,6 +4,7 @@ import (
 	"strings"
 
 	"github.com/cyberark/dev-flow/common"
+	"github.com/cyberark/dev-flow/service"
 )
 
 type IssueTrackingClient interface {
@@ -17,7 +18,9 @@ type IssueTrackingClient interface {
 }
 
 func GetClient() IssueTrackingClient {
-	return GitHub{}
+	return GitHub{
+		GitHubClient: service.GitHub{}.GetClient(),
+	}
 }
 
 func GetIssueKeyFromBranchName(branchName string) string {
