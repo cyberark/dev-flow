@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/spf13/cobra"
 
@@ -37,9 +38,23 @@ var reviseCmd = &cobra.Command{
 		chat := chat.GetClient()
 
 		if chat != nil {
+			userRealName, err := it.GetUserRealName(pr.Creator)
+
+			if err != nil {
+				fmt.Println(err)
+				os.Exit(1)
+			}
+
+			userLogin, err := it.GetCurrentUser()
+
+			if err != nil {
+				fmt.Println(err)
+				os.Exit(1)
+			}
+			
 			chat.DirectMessage(
-				it.GetUserRealName(pr.Creator),
-				fmt.Sprintf("%v has requested changes on %v", it.GetCurrentUser(), pr.URL),
+				userRealName,
+				fmt.Sprintf("%v has requested changes on %v", userLogin, pr.URL),
 			)
 		}
 	},

@@ -12,7 +12,7 @@ import (
 	"github.com/cyberark/dev-flow/versioncontrol"
 )
 
-type GitHubClient interface {
+type GitHubService interface {
 	GetUser(string) (*github.User, error)
 	GetIssues(versioncontrol.Repo) ([]*github.Issue, error)
 	GetIssue(repo versioncontrol.Repo, issueNum int) (*github.Issue, error)
@@ -33,10 +33,6 @@ func newClient() *github.Client {
 	tc := oauth2.NewClient(context.Background(), ts)
 
 	return github.NewClient(tc)
-}
-
-func (gh GitHub) GetClient() GitHub {
-	return GitHub{}
 }
 
 func (gh GitHub) GetUser(login string) (*github.User, error) {
