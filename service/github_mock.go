@@ -17,6 +17,7 @@ func (ghm GitHubMock) GetClient() GitHubMock {
 }
 
 func (ghm GitHubMock) GetUser(login string) (*github.User, error) {
+	// Parent folder will be wherever tests are run from.
 	userBytes := testutils.LoadJsonFile("testdata/github_user.json")
 
 	var user github.User
