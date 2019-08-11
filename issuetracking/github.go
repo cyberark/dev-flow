@@ -39,12 +39,12 @@ func toCommonIssue(ghIssue *github.Issue) common.Issue {
 	}
 }
 
-func (gh GitHub) getUser(username string) (*github.User, error) {
-	ghUser, err := gh.GitHubService.GetUser(username)
+func (gh GitHub) getUser(login string) (*github.User, error) {
+	ghUser, err := gh.GitHubService.GetUser(login)
 	return ghUser, err
 }
 
-func (gh GitHub) GetCurrentUser() (string, error) {
+func (gh GitHub) GetCurrentUserLogin() (string, error) {
 	ghUser, err := gh.getUser("")
 
 	if err != nil {
@@ -54,8 +54,8 @@ func (gh GitHub) GetCurrentUser() (string, error) {
 	return *ghUser.Login, nil
 }
 
-func (gh GitHub) GetUserRealName(username string) (string, error) {
-	ghUser, err := gh.getUser("")
+func (gh GitHub) GetUserRealName(login string) (string, error) {
+	ghUser, err := gh.getUser(login)
 
 	if err != nil {
 		return "", err

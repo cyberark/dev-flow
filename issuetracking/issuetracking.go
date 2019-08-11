@@ -8,7 +8,7 @@ import (
 )
 
 type IssueTrackingClient interface {
-	GetCurrentUser() (string, error)
+	GetCurrentUserLogin() (string, error)
 	GetUserRealName(string) (string, error)
 	Issues() []common.Issue
 	Issue(string) (common.Issue, error)

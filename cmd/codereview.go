@@ -67,7 +67,7 @@ var codereviewCmd = &cobra.Command{
 		chat := chat.GetClient()
 
 		if chat != nil {
-			userLogin, err := it.GetCurrentUser()
+			login, err := it.GetCurrentUserLogin()
 
 			if err != nil {
 				fmt.Println(err)
@@ -83,7 +83,7 @@ var codereviewCmd = &cobra.Command{
 			
 			chat.DirectMessage(
 				userRealName,
-				fmt.Sprintf("%v has requested your review on %v", userLogin, pr.URL),
+				fmt.Sprintf("%v has requested your review on %v", login, pr.URL),
 			)
 		}
 

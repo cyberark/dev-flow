@@ -15,10 +15,6 @@ type GitHubMock struct{
 }
 
 func (ghm GitHubMock) GetUser(login string) (*github.User, error) {
-	fmt.Println("****")
-	fmt.Println(ghm.Error)
-	fmt.Println("****")
-	
 	if ghm.Error != nil {
 		return nil, ghm.Error
 	}
