@@ -30,11 +30,11 @@ func TestGetCurrentUserLogin(t *testing.T) {
 			testutils.LoadFixture("testdata/github_user.json", user)
 		}
 
-		service := &mocks.GitHubService{}
-		service.On("GetUser", "").Return(user, test.err)
+		mockService := &mocks.GitHubService{}
+		mockService.On("GetUser", "").Return(user, test.err)
 
  		client := issuetracking.GitHub{
-			GitHubService: service,
+			GitHubService: mockService,
 		}
 
 		login, err := client.GetCurrentUserLogin()
@@ -61,11 +61,11 @@ func TestGetUserRealName(t *testing.T) {
 			testutils.LoadFixture("testdata/github_user.json", user)
 		}
 
-		service := &mocks.GitHubService{}
-		service.On("GetUser", "octocat").Return(user, test.err)
+		mockService := &mocks.GitHubService{}
+		mockService.On("GetUser", "octocat").Return(user, test.err)
 
  		client := issuetracking.GitHub{
-			GitHubService: service,
+			GitHubService: mockService,
 		}
 
 		login, err := client.GetUserRealName("octocat")

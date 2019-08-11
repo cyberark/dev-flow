@@ -13,7 +13,7 @@ func loadJsonFile(path string) []byte {
 	defer file.Close()
 	
 	if err != nil {
-		fmt.Println(err)
+		panic("Failed to load fixture.")
 	}
 
 	bytes, _ := ioutil.ReadAll(file)
