@@ -77,7 +77,7 @@ var completeCmd = &cobra.Command{
 				os.Exit(1)
 			}
 
-			userLogin, err := it.GetCurrentUser()
+			login, err := it.GetCurrentUserLogin()
 
 			if err != nil {
 				fmt.Println(err)
@@ -86,7 +86,7 @@ var completeCmd = &cobra.Command{
 			
 			chat.DirectMessage(
 				userRealName,
-				fmt.Sprintf("%v has merged your pull request %v", userLogin, pr.URL),
+				fmt.Sprintf("%v has merged your pull request %v", login, pr.URL),
 			)
 		}
 

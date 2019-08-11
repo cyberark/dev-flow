@@ -45,7 +45,7 @@ var reviseCmd = &cobra.Command{
 				os.Exit(1)
 			}
 
-			userLogin, err := it.GetCurrentUser()
+			login, err := it.GetCurrentUserLogin()
 
 			if err != nil {
 				fmt.Println(err)
@@ -54,7 +54,7 @@ var reviseCmd = &cobra.Command{
 			
 			chat.DirectMessage(
 				userRealName,
-				fmt.Sprintf("%v has requested changes on %v", userLogin, pr.URL),
+				fmt.Sprintf("%v has requested changes on %v", login, pr.URL),
 			)
 		}
 	},

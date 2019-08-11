@@ -26,15 +26,15 @@ var startCmd = &cobra.Command{
 			log.Fatalln(err)
 		}
 
-		userLogin, err := it.GetCurrentUser()
+		login, err := it.GetCurrentUserLogin()
 
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)
 		}
 		
-		it.AssignIssue(issue, userLogin)
-		fmt.Printf("Assigned issue %v to user %v.\n", *issue.Number, userLogin)
+		it.AssignIssue(issue, login)
+		fmt.Printf("Assigned issue %v to user %v.\n", *issue.Number, login)
 
 		err = it.AddIssueLabel(issue, viper.GetString("labels.start"))
 
