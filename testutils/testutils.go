@@ -1,12 +1,14 @@
 package testutils
 
 import (
+	"encoding/json"
+	
 	"fmt"
 	"io/ioutil"
 	"os"
 )
 
-func LoadJsonFile(path string) []byte {
+func loadJsonFile(path string) []byte {
 	file, err := os.Open(path)
 	defer file.Close()
 	
@@ -17,4 +19,14 @@ func LoadJsonFile(path string) []byte {
 	bytes, _ := ioutil.ReadAll(file)
 	
 	return bytes
+}
+
+func LoadFixture(path string, obj interface{}) {
+	bytes := loadJsonFile(path)
+
+	err := json.Unmarshal(bytes, obj)
+
+	if err != nil {
+		panic("Failed to unmarshal json.")
+	}
 }
