@@ -24,7 +24,7 @@ var issueCmd = &cobra.Command{
 			log.Fatalln(err)
 		}
 
-		util.Openbrowser(*issue.URL)
+		util.Openbrowser(issue.URL)
 	},
 }
 

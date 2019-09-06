@@ -10,7 +10,7 @@ import (
 type IssueTrackingClient interface {
 	GetCurrentUserLogin() (string, error)
 	GetUserRealName(string) (string, error)
-	Issues() []common.Issue
+	Issues() ([]common.Issue, error)
 	Issue(string) (common.Issue, error)
 	AssignIssue(common.Issue, string)
 	AddIssueLabel(common.Issue, string) error

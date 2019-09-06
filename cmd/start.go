@@ -34,7 +34,7 @@ var startCmd = &cobra.Command{
 		}
 		
 		it.AssignIssue(issue, login)
-		fmt.Printf("Assigned issue %v to user %v.\n", *issue.Number, login)
+		fmt.Printf("Assigned issue %v to user %v.\n", issue.Number, login)
 
 		err = it.AddIssueLabel(issue, viper.GetString("labels.start"))
 
@@ -51,7 +51,8 @@ var startCmd = &cobra.Command{
 		if vc.IsRemoteBranch(branchName) {
 			vc.CheckoutAndPull(branchName)
 		} else {
-			vc.InitBranch(*issue.Number, branchName)
+
+			vc.InitBranch(issue.Number, branchName)
 		}
 
 		fmt.Println("Issue started! You are now working in branch:", branchName)

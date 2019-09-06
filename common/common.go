@@ -7,19 +7,19 @@ import (
 )
 
 type Issue struct {
-	URL *string
-	Number *int
-	Title *string
-	Assignee *string
+	URL string
+	Number int
+	Title string
+	Assignee string
 	Labels []string
 }
 
 func (issue Issue) String() string {
-	return fmt.Sprintf("%v - %v", *issue.Number, *issue.Title)
+	return fmt.Sprintf("%v - %v", issue.Number, issue.Title)
 }
 
 func (issue Issue) BranchName() string {
-	title := *issue.Title
+	title := issue.Title
 	title = strings.ToLower(title)
 	title = strings.TrimSpace(title)
 
@@ -28,7 +28,7 @@ func (issue Issue) BranchName() string {
 
 	title = strings.Replace(title, " ", "-", -1)
 	
-	return fmt.Sprintf("%v--%v", *issue.Number, title)
+	return fmt.Sprintf("%v--%v", issue.Number, title)
 }
 
 func (issue Issue) HasLabel(label string) bool {
