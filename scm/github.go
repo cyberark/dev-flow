@@ -56,12 +56,12 @@ func (gh GitHub) CreatePullRequest(issue common.Issue, linkType string) *PullReq
 	base := "master"
 	head := issue.BranchName()
 	title := issue.Title
-	body := fmt.Sprintf("%s #%v", linkType, *issue.Number)
+	body := fmt.Sprintf("%s #%v", linkType, issue.Number)
 
 	newPullRequest := &github.NewPullRequest{
 		Base:  &base,
 		Head:  &head,
-		Title: title,
+		Title: &title,
 		Body:  &body,
 	}
 	
@@ -71,7 +71,7 @@ func (gh GitHub) CreatePullRequest(issue common.Issue, linkType string) *PullReq
 		panic(err)
 	}
 
-	err = newGitHubClient().AssignIssue(repo, *ghPullRequest.Number, *issue.Assignee)
+	err = newGitHubClient().AssignIssue(repo, *ghPullRequest.Number, issue.Assignee)
 
 	if err != nil {
 		panic(err)

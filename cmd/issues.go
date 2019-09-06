@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"log"
 	"strings"
 
 	"github.com/spf13/cobra"
@@ -16,19 +17,23 @@ var issuesCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		it := issuetracking.GetClient()
 
-		issues := it.Issues()
+		issues, err := it.Issues()
+
+		if err != nil {
+			log.Fatalln(err)
+		}
 
 		for _, issue := range issues {
 			assignee := "unassigned"
 
-			if issue.Assignee != nil {
-				assignee = *issue.Assignee
+			if issue.Assignee != "" {
+				assignee = issue.Assignee
 			}
 
 			fmt.Printf(
 				"%v - %v (%v) [%v] \n",
-				*issue.Number,
-				*issue.Title,
+				issue.Number,
+				issue.Title,
 				assignee,
 				strings.Join(issue.Labels, ", "),
 			)
