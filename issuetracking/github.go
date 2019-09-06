@@ -64,7 +64,7 @@ func (gh GitHub) GetUserRealName(login string) (string, error) {
 	return *ghUser.Name, nil
 }
 
-func (gh GitHub) Issues() ([]common.Issue, error) {
+func (gh GitHub) GetIssues() ([]common.Issue, error) {
 	repo := versioncontrol.Git{}.Repo()
 
 	ghIssues, err := gh.GitHubService.GetIssues(repo)
@@ -83,23 +83,24 @@ func (gh GitHub) Issues() ([]common.Issue, error) {
 	return issues, nil
 }
 
-func (gh GitHub) Issue(issueKey string) (common.Issue, error) {
+func (gh GitHub) GetIssue(issueKey string) (*common.Issue, error) {
 	repo := versioncontrol.Git{}.Repo()
 
 	issueNum, err := strconv.Atoi(issueKey)
 
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	ghIssue, err := gh.GitHubService.GetIssue(repo, issueNum)
 
 	if err != nil {
-		return common.Issue{},
-		errors.New(fmt.Sprintf("Could not find issue number %d", issueNum))
+		return nil, err
 	}
 
-	return toCommonIssue(ghIssue), nil
+	issue := toCommonIssue(ghIssue)
+
+	return &issue, nil
 }
 
 func (gh GitHub) AssignIssue(issue common.Issue, login string) {

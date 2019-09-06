@@ -3,6 +3,7 @@ package issuetracking_test
 import (
 	"errors"
 //	"fmt"
+	"strconv"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -78,7 +79,7 @@ func TestGetUserRealName(t *testing.T) {
 	}
 }
 
-func TestIssues(t *testing.T) {
+func TestGetIssues(t *testing.T) {
 	tests := map[string]struct{
 		result []common.Issue
 		err error
@@ -122,9 +123,53 @@ func TestIssues(t *testing.T) {
 			GitHubService: mockService,
 		}
 
-		issues, err := client.Issues()
+		issues, err := client.GetIssues()
 		
 		assert.Equal(t, test.result, issues)
+		assert.Equal(t, test.err, err)
+	}
+}
+
+func TestGetIssue(t *testing.T) {
+	tests := map[string]struct{
+		result *common.Issue
+		err error
+	}{
+		"success":          {
+			result: &common.Issue{
+				URL: "https://github.com/octocat/Hello-World/issues/1347",
+				Number: 1347,
+				Title: "Found a bug",
+				Assignee: "octocat",
+				Labels: []string{"bug"},
+			},
+			err: nil,
+		},
+		"propagates error": { result: nil, err: errors.New("an error") },
+	}
+
+	for _, test := range tests {
+		var ghIssue *github.Issue
+		
+		if test.result != nil {
+			testutils.LoadFixture("testdata/github_issue.json", &ghIssue)
+		}
+
+		// TODO: set up a mock for the git helper so that we can stub
+		// repo info instead of using cyberark/dev-flow in the tests.
+		repo := versioncontrol.Git{}.Repo()
+		issueNum := 1347
+		
+		mockService := &mocks.GitHubService{}
+		mockService.On("GetIssue", repo, issueNum).Return(ghIssue, test.err)
+		
+		client := issuetracking.GitHub{
+			GitHubService: mockService,
+		}
+
+		issue, err := client.GetIssue(strconv.Itoa(issueNum))
+		
+		assert.Equal(t, test.result, issue)
 		assert.Equal(t, test.err, err)
 	}
 }

@@ -35,19 +35,19 @@ var codereviewCmd = &cobra.Command{
 
 		it := issuetracking.GetClient()
 		issueKey := issuetracking.GetIssueKeyFromBranchName(branchName)
-		issue, err := it.Issue(issueKey)
+		issue, err := it.GetIssue(issueKey)
 
 		if err != nil {
 			log.Fatalln(err)
 		}
 
-		err = it.RemoveIssueLabel(issue, viper.GetString("labels.start"))
+		err = it.RemoveIssueLabel(*issue, viper.GetString("labels.start"))
 
 		if err != nil {
 			log.Println(err)
 		}
 		
-		err = it.AddIssueLabel(issue, viper.GetString("labels.codereview"))
+		err = it.AddIssueLabel(*issue, viper.GetString("labels.codereview"))
 
 		if err != nil {
 			log.Println(err)
@@ -59,7 +59,7 @@ var codereviewCmd = &cobra.Command{
 		if pr != nil {
 			fmt.Println("Pull request already exists for branch", branchName)
 		} else {
-			pr = scm.CreatePullRequest(issue, LinkTypeCodereview)
+			pr = scm.CreatePullRequest(*issue, LinkTypeCodereview)
 		}
 
 		scm.AssignPullRequestReviewer(pr, reviewer)

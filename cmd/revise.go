@@ -27,13 +27,13 @@ var reviseCmd = &cobra.Command{
 		// TODO: This won't work when the issue tracker != the scm
 		// for example Jira vs GitHub
 		it := issuetracking.GetClient()
-		issue, err := it.Issue(issueKey)
+		issue, err := it.GetIssue(issueKey)
 
 		if err != nil {
 			log.Fatalln(err)
 		}
 		
-		it.AssignIssue(issue, pr.Creator)
+		it.AssignIssue(*issue, pr.Creator)
 
 		chat := chat.GetClient()
 

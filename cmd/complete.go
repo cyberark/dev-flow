@@ -52,7 +52,7 @@ var completeCmd = &cobra.Command{
 
 		it := issuetracking.GetClient()
 		issueKey := issuetracking.GetIssueKeyFromBranchName(branchName)
-		issue, err := it.Issue(issueKey)
+		issue, err := it.GetIssue(issueKey)
 
 		if err != nil {
 			log.Fatalln(err)
@@ -65,7 +65,7 @@ var completeCmd = &cobra.Command{
 			log.Fatalln(err)
 		}
 
-		it.AssignIssue(issue, pr.Creator)
+		it.AssignIssue(*issue, pr.Creator)
 
 		chat := chat.GetClient()
 
@@ -90,13 +90,13 @@ var completeCmd = &cobra.Command{
 			)
 		}
 
-		err = it.RemoveIssueLabel(issue, viper.GetString("labels.codereview"))
+		err = it.RemoveIssueLabel(*issue, viper.GetString("labels.codereview"))
 
 		if err != nil {
 			log.Println(err)
 		}
 		
-		err = it.AddIssueLabel(issue, viper.GetString("labels.complete"))
+		err = it.AddIssueLabel(*issue, viper.GetString("labels.complete"))
 
 		if err != nil {
 			log.Println(err)
