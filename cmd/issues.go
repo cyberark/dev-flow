@@ -17,7 +17,7 @@ var issuesCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		it := issuetracking.GetClient()
 
-		issues, err := it.Issues()
+		issues, err := it.GetIssues()
 
 		if err != nil {
 			log.Fatalln(err)

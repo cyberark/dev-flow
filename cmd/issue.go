@@ -18,7 +18,7 @@ var issueCmd = &cobra.Command{
 		issueKey := args[0]
 		
 		it := issuetracking.GetClient()
-		issue, err := it.Issue(issueKey)
+		issue, err := it.GetIssue(issueKey)
 
 		if err != nil {
 			log.Fatalln(err)

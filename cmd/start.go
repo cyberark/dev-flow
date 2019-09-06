@@ -20,7 +20,7 @@ var startCmd = &cobra.Command{
 		issueKey := args[0]
 
 		it := issuetracking.GetClient()
-		issue, err := it.Issue(issueKey)
+		issue, err := it.GetIssue(issueKey)
 
 		if err != nil {
 			log.Fatalln(err)
@@ -33,10 +33,10 @@ var startCmd = &cobra.Command{
 			os.Exit(1)
 		}
 		
-		it.AssignIssue(issue, login)
+		it.AssignIssue(*issue, login)
 		fmt.Printf("Assigned issue %v to user %v.\n", issue.Number, login)
 
-		err = it.AddIssueLabel(issue, viper.GetString("labels.start"))
+		err = it.AddIssueLabel(*issue, viper.GetString("labels.start"))
 
 		if err != nil {
 			log.Println(err)

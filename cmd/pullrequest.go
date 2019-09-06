@@ -34,13 +34,13 @@ var pullrequestCmd = &cobra.Command{
 			fmt.Println("Pull request already exists for branch", branchName)
 		} else {
 			issueKey := issuetracking.GetIssueKeyFromBranchName(branchName)
-			issue, err := issuetracking.GetClient().Issue(issueKey)
+			issue, err := issuetracking.GetClient().GetIssue(issueKey)
 
 			if err != nil {
 				log.Fatalln(err)
 			}
 			
-			pr = scm.CreatePullRequest(issue, LinkTypePullrequest)
+			pr = scm.CreatePullRequest(*issue, LinkTypePullrequest)
 		}
 
 		if util.Confirm("Open pull request in browser?") {

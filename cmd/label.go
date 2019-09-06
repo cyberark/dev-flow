@@ -31,13 +31,13 @@ var labelCmd = &cobra.Command{
 		}
 		
 		it := issuetracking.GetClient()
-		issue, err := it.Issue(IssueKey)
+		issue, err := it.GetIssue(IssueKey)
 
 		if err != nil {
 			log.Fatalln(err)
 		}
 		
-		err = it.AddIssueLabel(issue, label)
+		err = it.AddIssueLabel(*issue, label)
 
 		if err != nil {
 			log.Println(err)
