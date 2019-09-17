@@ -3,7 +3,6 @@ package testutils
 import (
 	"encoding/json"
 	
-//	"fmt"
 	"io/ioutil"
 	"os"
 )

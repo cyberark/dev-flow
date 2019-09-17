@@ -2,7 +2,6 @@ package issuetracking_test
 
 import (
 	"errors"
-//	"fmt"
 	"strconv"
 	"testing"
 
