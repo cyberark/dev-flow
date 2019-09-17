@@ -103,14 +103,16 @@ func (gh GitHub) GetIssue(issueKey string) (*common.Issue, error) {
 	return &issue, nil
 }
 
-func (gh GitHub) AssignIssue(issue common.Issue, login string) {
+func (gh GitHub) AssignIssue(issueNum int, login string) error {
 	repo := versioncontrol.Git{}.Repo()
 
-	err := gh.GitHubService.AssignIssue(repo, issue.Number, login)
+	err := gh.GitHubService.AssignIssue(repo, issueNum, login)
 	
 	if err != nil {
-		panic(err)
+		return err
 	}
+
+	return nil
 }
 
 func (gh GitHub) AddIssueLabel(issue common.Issue, labelName string) error {

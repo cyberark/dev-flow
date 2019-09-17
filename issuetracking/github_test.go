@@ -53,7 +53,7 @@ func TestGetUserRealName(t *testing.T) {
 		result string
 		err error
 	}{
-		"success":          { result: "monalisa octocat", err: nil },
+		"success": { result: "monalisa octocat", err: nil },
 		"propagates error": { result: "", err: errors.New("an error") },
 	}
 
@@ -84,7 +84,7 @@ func TestGetIssues(t *testing.T) {
 		result []common.Issue
 		err error
 	}{
-		"success":          {
+		"success": {
 			result: []common.Issue{
 				{
 					URL: "https://github.com/octocat/Hello-World/issues/1347",
@@ -135,7 +135,7 @@ func TestGetIssue(t *testing.T) {
 		result *common.Issue
 		err error
 	}{
-		"success":          {
+		"success": {
 			result: &common.Issue{
 				URL: "https://github.com/octocat/Hello-World/issues/1347",
 				Number: 1347,
@@ -170,6 +170,34 @@ func TestGetIssue(t *testing.T) {
 		issue, err := client.GetIssue(strconv.Itoa(issueNum))
 		
 		assert.Equal(t, test.result, issue)
+		assert.Equal(t, test.err, err)
+	}
+}
+
+func TestAssignissue(t *testing.T) {
+	tests := map[string]struct{
+		err error
+	}{
+		"success": { err: nil },
+		"propagates error": { err: errors.New("an error") },
+	}
+
+	for _, test := range tests {
+		// TODO: set up a mock for the git helper so that we can stub
+		// repo info instead of using cyberark/dev-flow in the tests.
+		repo := versioncontrol.Git{}.Repo()
+		issueNum := 123
+		login := "octocat"
+
+		mockService := &mocks.GitHubService{}
+		mockService.On("AssignIssue", repo, issueNum, login).Return(test.err)
+
+		client := issuetracking.GitHub{
+			GitHubService: mockService,
+		}
+		
+		err := client.AssignIssue(issueNum, login)
+		
 		assert.Equal(t, test.err, err)
 	}
 }

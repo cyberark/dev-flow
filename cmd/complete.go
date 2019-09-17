@@ -65,8 +65,12 @@ var completeCmd = &cobra.Command{
 			log.Fatalln(err)
 		}
 
-		it.AssignIssue(*issue, pr.Creator)
+		err = it.AssignIssue(issue.Number, pr.Creator)
 
+		if err != nil {
+			log.Fatalln(err)
+		}
+		
 		chat := chat.GetClient()
 
 		if chat != nil {
