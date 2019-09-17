@@ -3,7 +3,6 @@ package cmd
 import (
 	"fmt"
 	"log"
-	"os"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -44,8 +43,7 @@ var completeCmd = &cobra.Command{
 		}
 
 		if !util.Confirm(fmt.Sprintf("Are you sure you want to merge %v into %v?", branchName, pr.Base)) {
-			fmt.Println("Pull request not merged.")
-			os.Exit(0)
+			log.Fatalln("Pull request not merged.")
 		}
 
 		success := scm.MergePullRequest(pr, MergeMethod)
@@ -77,15 +75,13 @@ var completeCmd = &cobra.Command{
 			userRealName, err := it.GetUserRealName(pr.Creator)
 
 			if err != nil {
-				fmt.Println(err)
-				os.Exit(1)
+				log.Fatalln(err)
 			}
 
 			login, err := it.GetCurrentUserLogin()
 
 			if err != nil {
-				fmt.Println(err)
-				os.Exit(1)
+				log.Fatalln(err)
 			}
 			
 			chat.DirectMessage(

@@ -3,7 +3,6 @@ package cmd
 import (
 	"fmt"
 	"log"
-	"os"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -70,15 +69,13 @@ var codereviewCmd = &cobra.Command{
 			login, err := it.GetCurrentUserLogin()
 
 			if err != nil {
-				fmt.Println(err)
-				os.Exit(1)
+				log.Fatalln(err)
 			}
 
 			userRealName, err := it.GetUserRealName(reviewer)
 
 			if err != nil {
-				fmt.Println(err)
-				os.Exit(1)
+				log.Fatalln(err)
 			}
 			
 			chat.DirectMessage(

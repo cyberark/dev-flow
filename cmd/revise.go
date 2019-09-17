@@ -3,7 +3,6 @@ package cmd
 import (
 	"fmt"
 	"log"
-	"os"
 
 	"github.com/spf13/cobra"
 
@@ -45,15 +44,13 @@ var reviseCmd = &cobra.Command{
 			userRealName, err := it.GetUserRealName(pr.Creator)
 
 			if err != nil {
-				fmt.Println(err)
-				os.Exit(1)
+				log.Fatalln(err)
 			}
 
 			login, err := it.GetCurrentUserLogin()
 
 			if err != nil {
-				fmt.Println(err)
-				os.Exit(1)
+				log.Fatalln(err)
 			}
 			
 			chat.DirectMessage(
