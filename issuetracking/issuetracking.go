@@ -13,8 +13,8 @@ type IssueTrackingClient interface {
 	GetIssues() ([]common.Issue, error)
 	GetIssue(string) (*common.Issue, error)
 	AssignIssue(int, string) error
-	AddIssueLabel(common.Issue, string) error
-	RemoveIssueLabel(common.Issue, string) error
+	AddIssueLabel(int, string) error
+	RemoveIssueLabel(int, string) error
 }
 
 func GetClient() IssueTrackingClient {

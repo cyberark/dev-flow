@@ -37,7 +37,7 @@ var labelCmd = &cobra.Command{
 			log.Fatalln(err)
 		}
 		
-		err = it.AddIssueLabel(*issue, label)
+		err = it.AddIssueLabel(issue.Number, label)
 
 		if err != nil {
 			log.Println(err)
