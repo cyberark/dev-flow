@@ -201,3 +201,55 @@ func TestAssignissue(t *testing.T) {
 		assert.Equal(t, test.err, err)
 	}
 }
+
+func TestAddIssueLabel(t *testing.T) {
+	tests := map[string]struct{
+		err error
+	}{
+		"success": { err: nil },
+		"propagates error": { err: errors.New("an error") },
+	}
+
+	for _, test := range tests {
+		repo := versioncontrol.Git{}.Repo()
+		issueNum := 123
+		labelName := "test"
+
+		mockService := &mocks.GitHubService{}
+		mockService.On("AddLabelToIssue", repo, issueNum, labelName).Return(test.err)
+
+		client := issuetracking.GitHub{
+			GitHubService: mockService,
+		}
+		
+		err := client.AddIssueLabel(issueNum, labelName)
+		
+		assert.Equal(t, test.err, err)		
+	}
+}
+
+func TestRemoveIssueLabel(t *testing.T) {
+	tests := map[string]struct{
+		err error
+	}{
+		"success": { err: nil },
+		"propagates error": { err: errors.New("an error") },
+	}
+
+	for _, test := range tests {
+		repo := versioncontrol.Git{}.Repo()
+		issueNum := 123
+		labelName := "test"
+
+		mockService := &mocks.GitHubService{}
+		mockService.On("RemoveLabelForIssue", repo, issueNum, labelName).Return(test.err)
+
+		client := issuetracking.GitHub{
+			GitHubService: mockService,
+		}
+		
+		err := client.RemoveIssueLabel(issueNum, labelName)
+		
+		assert.Equal(t, test.err, err)		
+	}
+}

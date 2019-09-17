@@ -41,13 +41,13 @@ var codereviewCmd = &cobra.Command{
 			log.Fatalln(err)
 		}
 
-		err = it.RemoveIssueLabel(*issue, viper.GetString("labels.start"))
+		err = it.RemoveIssueLabel(issue.Number, viper.GetString("labels.start"))
 
 		if err != nil {
 			log.Println(err)
 		}
 		
-		err = it.AddIssueLabel(*issue, viper.GetString("labels.codereview"))
+		err = it.AddIssueLabel(issue.Number, viper.GetString("labels.codereview"))
 
 		if err != nil {
 			log.Println(err)

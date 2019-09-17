@@ -1,8 +1,6 @@
 package issuetracking
 
 import (
-	"errors"
-	"fmt"
 	"strconv"
 
 	"github.com/google/go-github/github"
@@ -115,60 +113,26 @@ func (gh GitHub) AssignIssue(issueNum int, login string) error {
 	return nil
 }
 
-func (gh GitHub) AddIssueLabel(issue common.Issue, labelName string) error {
-	if labelName == "" {
-		return errors.New("Unable to add blank label.")
-	}
+func (gh GitHub) AddIssueLabel(issueNum int, labelName string) error {
+	repo := versioncontrol.Git{}.Repo()
 
-	if issue.HasLabel(labelName) {
-		return fmt.Errorf("Issue %d already has label '%s'.", issue.Number, labelName)
-	}
-
-	_, err := gh.getLabel(labelName)
-
+	err := gh.GitHubService.AddLabelToIssue(repo, issueNum, labelName)
+	
 	if err != nil {
 		return err
 	}
 
-	repo := versioncontrol.Git{}.Repo()
-
-	err = gh.GitHubService.AddLabelToIssue(repo, issue.Number, labelName)
-	
-	if err != nil {
-		return fmt.Errorf("Failed to add label '%s' to issue %d: %s", labelName, issue.Number, err)
-	}
-
 	return nil
 }
 
-func (gh GitHub) RemoveIssueLabel(issue common.Issue, labelName string) error {
-	if labelName == "" {
-		return errors.New("Unable to remove blank label.")
-	}
-
-	if !issue.HasLabel(labelName) {
-		return fmt.Errorf("Issue %d does not have label '%s'.", issue.Number, labelName)
-	}
-	
+func (gh GitHub) RemoveIssueLabel(issueNum int, labelName string) error {
 	repo := versioncontrol.Git{}.Repo()
 	
-	err := gh.GitHubService.RemoveLabelForIssue(repo, issue.Number, labelName)
+	err := gh.GitHubService.RemoveLabelForIssue(repo, issueNum, labelName)
 
 	if err != nil {
-		return fmt.Errorf("Failed to remove label '%s' from issue %d: %s", labelName, issue.Number, err)
+		return err
 	}
 	
 	return nil
-}
-
-func (gh GitHub) getLabel(name string) (*github.Label, error) {
-	repo := versioncontrol.GetClient().Repo()
-
-	ghLabel, err := gh.GitHubService.GetLabel(repo, name)
-
-	if err != nil {
-		return nil, err
-	}
-
-	return ghLabel, nil
 }

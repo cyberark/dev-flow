@@ -94,13 +94,13 @@ var completeCmd = &cobra.Command{
 			)
 		}
 
-		err = it.RemoveIssueLabel(*issue, viper.GetString("labels.codereview"))
+		err = it.RemoveIssueLabel(issue.Number, viper.GetString("labels.codereview"))
 
 		if err != nil {
 			log.Println(err)
 		}
 		
-		err = it.AddIssueLabel(*issue, viper.GetString("labels.complete"))
+		err = it.AddIssueLabel(issue.Number, viper.GetString("labels.complete"))
 
 		if err != nil {
 			log.Println(err)
