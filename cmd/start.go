@@ -19,8 +19,13 @@ var startCmd = &cobra.Command{
 		issueKey := args[0]
 
 		vc := versioncontrol.GetClient()
+		repo, err := vc.Repo()
 
-		it := issuetracking.GetClient(vc.Repo())
+		if err != nil {
+			log.Fatalln(err)
+		}
+
+		it := issuetracking.GetClient(repo)
 		issue, err := it.GetIssue(issueKey)
 
 		if err != nil {
@@ -51,11 +56,28 @@ var startCmd = &cobra.Command{
 
 		branchName := issue.BranchName()
 
-		if vc.IsRemoteBranch(branchName) {
-			vc.CheckoutAndPull(branchName)
-		} else {
+		isRemote, err := vc.IsRemoteBranch(branchName)
 
-			vc.InitBranch(issue.Number, branchName)
+		if err != nil {
+			log.Fatalln(err)
+		}
+		
+		if isRemote {
+			output, err := vc.CheckoutAndPull(branchName)
+
+			if err != nil {
+				log.Fatalln(err)
+			}
+			
+			log.Println(output)			
+		} else {
+			output, err := vc.InitBranch(issue.Number, branchName)
+			
+			if err != nil {
+				log.Fatalln(err)
+			}
+
+			log.Println(output)
 		}
 
 		fmt.Println("Issue started! You are now working in branch:", branchName)

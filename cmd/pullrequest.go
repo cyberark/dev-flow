@@ -26,16 +26,26 @@ var pullrequestCmd = &cobra.Command{
 		)
 		
 		vc := versioncontrol.GetClient()
-		branchName := vc.CurrentBranch()
+		repo, err := vc.Repo()
 
-		scm := scm.GetClient()
+		if err != nil {
+			log.Fatalln(err)
+		}
+		
+		branchName, err := vc.CurrentBranch()
+
+		if err != nil {
+			log.Fatalln(err)
+		}
+
+		scm := scm.GetClient(repo)
 		pr := scm.GetPullRequest(branchName)
 
 		if pr != nil {
 			fmt.Println("Pull request already exists for branch", branchName)
 		} else {
 			issueKey := issuetracking.GetIssueKeyFromBranchName(branchName)
-			issue, err := issuetracking.GetClient(vc.Repo()).GetIssue(issueKey)
+			issue, err := issuetracking.GetClient(repo).GetIssue(issueKey)
 
 			if err != nil {
 				log.Fatalln(err)

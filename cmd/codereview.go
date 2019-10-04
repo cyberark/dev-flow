@@ -31,9 +31,19 @@ var codereviewCmd = &cobra.Command{
 		reviewer := args[0]
 
 		vc := versioncontrol.GetClient()
-		branchName := vc.CurrentBranch()
+		repo, err := vc.Repo()
 
-		it := issuetracking.GetClient(vc.Repo())
+		if err != nil {
+			log.Fatalln(err)
+		}
+		
+		branchName, err := vc.CurrentBranch()
+
+		if err != nil {
+			log.Fatalln(err)
+		}
+
+		it := issuetracking.GetClient(repo)
 		issueKey := issuetracking.GetIssueKeyFromBranchName(branchName)
 		issue, err := it.GetIssue(issueKey)
 
@@ -53,7 +63,7 @@ var codereviewCmd = &cobra.Command{
 			log.Println(err)
 		}
 
-		scm := scm.GetClient()
+		scm := scm.GetClient(repo)
 		pr := scm.GetPullRequest(branchName)
 
 		if pr != nil {

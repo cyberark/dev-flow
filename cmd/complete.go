@@ -27,9 +27,19 @@ var completeCmd = &cobra.Command{
 		)
 		
 		vc := versioncontrol.GetClient()
-		branchName := vc.CurrentBranch()
+		repo, err := vc.Repo()
 
-		scm := scm.GetClient()
+		if err != nil {
+			log.Fatalln(err)
+		}
+		
+		branchName, err := vc.CurrentBranch()
+
+		if err != nil {
+			log.Fatalln(err)
+		}
+
+		scm := scm.GetClient(repo)
 		pr := scm.GetPullRequest(branchName)
 
 		if pr == nil {
@@ -48,7 +58,7 @@ var completeCmd = &cobra.Command{
 
 		success := scm.MergePullRequest(pr, MergeMethod)
 
-		it := issuetracking.GetClient(vc.Repo())
+		it := issuetracking.GetClient(repo)
 		issueKey := issuetracking.GetIssueKeyFromBranchName(branchName)
 		issue, err := it.GetIssue(issueKey)
 

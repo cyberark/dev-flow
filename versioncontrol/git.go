@@ -2,82 +2,122 @@ package versioncontrol
 
 import (
 	"fmt"
-	"os/exec"
 	"strings"
 
 	"github.com/cyberark/dev-flow/common"
+	"github.com/cyberark/dev-flow/service"
 )
 
-type Git struct{}
+type Git struct{
+	BashService service.Bash
+}
 
-func (git Git) runCommand(cmd string, print bool) string {
-	output, err := exec.Command("bash", "-c", cmd).Output()
+func (git Git) Repo() (common.Repo, error) {
+	cmd := "git remote show origin -n | grep h.URL | sed 's/.*://;s/.git$//'"
+	
+	repoSlug, err := git.BashService.RunCommand(cmd)
 
 	if err != nil {
-		panic(fmt.Sprintf("Failed to execute command: %s", cmd))
+		return common.Repo{}, err
 	}
-
-	outputStr := string(output)
-
-	if print {
-		fmt.Println(outputStr)
-	}
-
-	return outputStr
-}
-
-func (git Git) Repo() common.Repo {
-	slug := git.runCommand("git remote show origin -n | grep h.URL | sed 's/.*://;s/.git$//'", false)
-	slugSplit := strings.Split(strings.TrimSpace(slug), "/")
+	
+	repoSlugSplit := strings.Split(strings.TrimSpace(repoSlug), "/")
 
 	repo := common.Repo {
-		Owner: slugSplit[0],
-		Name: slugSplit[1],
+		Owner: repoSlugSplit[0],
+		Name: repoSlugSplit[1],
 	}
 	
-	return repo
+	return repo, nil
 }
 
-func (git Git) CurrentBranch() string {
-	output := git.runCommand("git branch | grep \\* | cut -d ' ' -f2", false)
-	return strings.TrimSpace(output)
+func (git Git) CurrentBranch() (string, error) {
+	cmd := "git branch | grep \\* | cut -d ' ' -f2"
+	
+	branch, err := git.BashService.RunCommand(cmd)
+
+	if err != nil {
+		return branch, err
+	}
+	
+	return strings.TrimSpace(branch), nil
 }
 
-func (git Git) Pull() {
-	git.runCommand("git pull", true)
+func (git Git) Pull() (string, error) {
+	return git.BashService.RunCommand("git pull")
 }
 
-func (git Git) CheckoutAndPull(branchName string) {
+func (git Git) CheckoutAndPull(branchName string) (string, error) {
 	cmd := fmt.Sprintf("git checkout %v", branchName)
-	git.runCommand(cmd, true)
-	git.Pull()
+	checkoutOutput, err := git.BashService.RunCommand(cmd)
+
+	output := ""
+	output += checkoutOutput
+	
+	if err != nil {
+		return output, err
+	}
+	
+	pullOutput, err := git.Pull()
+
+	output += pullOutput
+
+	if err != nil {
+		return output, err
+	}
+
+	return output, nil
 }
 
-func (git Git) IsRemoteBranch(branchName string) bool {
-	repo := git.Repo()
-	slug := fmt.Sprintf("%v/%v", repo.Owner, repo.Name)
-	
-	cmd := fmt.Sprintf("git ls-remote --heads git@github.com:%v.git %v", slug, branchName)
-	
-	output := git.runCommand(cmd, false)
+func (git Git) IsRemoteBranch(branchName string) (bool, error) {
+	repo, err := git.Repo()
 
-	return output != ""
+	if err != nil {
+		return false, err
+	}
+	
+	repoSlug := fmt.Sprintf("%v/%v", repo.Owner, repo.Name)
+	
+	cmd := fmt.Sprintf("git ls-remote --heads git@github.com:%v.git %v", repoSlug, branchName)
+	
+	output, err := git.BashService.RunCommand(cmd)
+
+	if err != nil {
+		return false, err
+	}
+
+	return output != "", nil
 }
 
-func (git Git) InitBranch(issueNum int, branchName string) {
+func (git Git) InitBranch(issueNum int, branchName string) (string, error) {
 	cmd := fmt.Sprintf("git checkout -b %v", branchName)
-	git.runCommand(cmd, true)
+	checkoutOutput, err := git.BashService.RunCommand(cmd)
+
+	output := ""
+	output += checkoutOutput
+
+	if err != nil {
+		return output, err
+	}
 	
 	cmd = fmt.Sprintf("git push --set-upstream origin %v", branchName)
-	git.runCommand(cmd, true)
+	pushOutput, err := git.BashService.RunCommand(cmd)
+
+	output += pushOutput
+	
+	if err != nil {
+		return output, err
+	}
+
+	return output, nil
 }
 
-func (git Git) DeleteRemoteBranch(branchName string) {
+func (git Git) DeleteRemoteBranch(branchName string) (string, error) {
 	cmd := fmt.Sprintf("git push origin --delete %v", branchName)
-	git.runCommand(cmd, true)
+	return git.BashService.RunCommand(cmd)
 }
 
-func (git Git) DeleteLocalBranch(branchName string) {
+func (git Git) DeleteLocalBranch(branchName string) (string, error) {
 	cmd := fmt.Sprintf("git branch -D %v", branchName)
-	git.runCommand(cmd, true)
+	return git.BashService.RunCommand(cmd)
 }

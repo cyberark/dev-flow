@@ -15,8 +15,10 @@ func (pr PullRequest) String() string {
 	return pr.URL
 }
 
-func GetClient() SourceControlManagementClient {
-	return GitHub{}
+func GetClient(repo common.Repo) SourceControlManagementClient {
+	return GitHub{
+		Repo: repo,
+	}
 }
 
 type PullRequest struct {

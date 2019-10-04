@@ -5,14 +5,14 @@ import (
 )
 
 type VersionControlClient interface {
-	Repo() common.Repo
-	CurrentBranch() string
-	Pull()
-	CheckoutAndPull(string)
-	IsRemoteBranch(string) bool
-	InitBranch(int, string)
-	DeleteRemoteBranch(string)
-	DeleteLocalBranch(string)
+	Repo() (common.Repo, error)
+	CurrentBranch() (string, error)
+	Pull() (string, error)
+	CheckoutAndPull(string) (string, error)
+	IsRemoteBranch(string) (bool, error)
+	InitBranch(int, string) (string, error)
+	DeleteRemoteBranch(string) (string, error)
+	DeleteLocalBranch(string) (string, error)
 }
 
 func GetClient() VersionControlClient {

@@ -17,8 +17,13 @@ var issuesCmd = &cobra.Command{
 	Long:  "Lists open, unassigned issues on the current repository.",
 	Run: func(cmd *cobra.Command, args []string) {
 		vc := versioncontrol.GetClient()
+		repo, err := vc.Repo()
+
+		if err != nil {
+			log.Fatalln(err)
+		}
 		
-		it := issuetracking.GetClient(vc.Repo())
+		it := issuetracking.GetClient(repo)
 
 		issues, err := it.GetIssues()
 

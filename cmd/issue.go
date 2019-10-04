@@ -19,8 +19,13 @@ var issueCmd = &cobra.Command{
 		issueKey := args[0]
 
 		vc := versioncontrol.GetClient()
+		repo, err := vc.Repo()
+
+		if err != nil {
+			log.Fatalln(err)
+		}
 		
-		it := issuetracking.GetClient(vc.Repo())
+		it := issuetracking.GetClient(repo)
 		issue, err := it.GetIssue(issueKey)
 
 		if err != nil {

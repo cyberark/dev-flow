@@ -17,15 +17,26 @@ var reviseCmd = &cobra.Command{
 	Short: "Rejects a PR and assigns it back to the implementor.",
 	Run: func(cmd *cobra.Command, args []string) {
 		vc := versioncontrol.GetClient()
-		branchName := vc.CurrentBranch()
+		repo, err := vc.Repo()
+
+		if err != nil {
+			log.Fatalln(err)
+		}
+		
+		branchName, err := vc.CurrentBranch()
+
+		if err != nil {
+			log.Fatalln(err)
+		}
+		
 		issueKey := issuetracking.GetIssueKeyFromBranchName(branchName)
 
-		scm := scm.GetClient()
+		scm := scm.GetClient(repo)
 		pr := scm.GetPullRequest(branchName)
 
 		// TODO: This won't work when the issue tracker != the scm
 		// for example Jira vs GitHub
-		it := issuetracking.GetClient(vc.Repo())
+		it := issuetracking.GetClient(repo)
 		issue, err := it.GetIssue(issueKey)
 
 		if err != nil {

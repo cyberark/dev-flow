@@ -21,10 +21,21 @@ var labelCmd = &cobra.Command{
 		label := args[0]
 
 		vc := versioncontrol.GetClient()
+		repo, err := vc.Repo()
+
+		if err != nil {
+			log.Fatalln(err)
+		}
 		
 		if IssueKey == "" {
 			fmt.Println("No issue key provided, retrieving from branch.")
-			branchName := vc.CurrentBranch()
+
+			branchName, err := vc.CurrentBranch()
+
+			if err != nil {
+				log.Fatalln(err)
+			}
+			
 			IssueKey = issuetracking.GetIssueKeyFromBranchName(branchName)
 		}
 
@@ -32,7 +43,7 @@ var labelCmd = &cobra.Command{
 			log.Fatalln("No issue key provided")
 		}
 		
-		it := issuetracking.GetClient(vc.Repo())
+		it := issuetracking.GetClient(repo)
 		issue, err := it.GetIssue(IssueKey)
 
 		if err != nil {

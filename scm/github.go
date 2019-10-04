@@ -7,19 +7,18 @@ import (
 
 	"github.com/cyberark/dev-flow/common"
 	"github.com/cyberark/dev-flow/service"
-	"github.com/cyberark/dev-flow/versioncontrol"
 )
 
-type GitHub struct{}
+type GitHub struct{
+	Repo common.Repo
+}
 
 func newGitHubClient() service.GitHub {
 	return service.GitHub{}
 }
 
 func (gh GitHub) GetPullRequest(branchName string) *PullRequest {
-	repo := versioncontrol.GetClient().Repo()
-
-	ghPullRequests, err := newGitHubClient().GetPullRequests(repo, branchName)
+	ghPullRequests, err := newGitHubClient().GetPullRequests(gh.Repo, branchName)
 	
 	if err != nil {
 		panic(err)
@@ -38,7 +37,7 @@ func (gh GitHub) GetPullRequest(branchName string) *PullRequest {
 	if pullRequestNum != nil {
 		// We call List and then Get because the Mergeable field is only
 		// returned when retrieving single issues.
-		ghPullRequest, err := newGitHubClient().GetPullRequest(repo, *pullRequestNum)
+		ghPullRequest, err := newGitHubClient().GetPullRequest(gh.Repo, *pullRequestNum)
 		
 		if err != nil {
 			panic(err)
@@ -51,8 +50,6 @@ func (gh GitHub) GetPullRequest(branchName string) *PullRequest {
 }
 
 func (gh GitHub) CreatePullRequest(issue common.Issue, linkType string) *PullRequest {
-	repo := versioncontrol.GetClient().Repo()
-
 	base := "master"
 	head := issue.BranchName()
 	title := issue.Title
@@ -65,13 +62,13 @@ func (gh GitHub) CreatePullRequest(issue common.Issue, linkType string) *PullReq
 		Body:  &body,
 	}
 	
-	ghPullRequest, err := newGitHubClient().CreatePullRequest(repo, newPullRequest)
+	ghPullRequest, err := newGitHubClient().CreatePullRequest(gh.Repo, newPullRequest)
 	
 	if err != nil {
 		panic(err)
 	}
 
-	err = newGitHubClient().AssignIssue(repo, *ghPullRequest.Number, issue.Assignee)
+	err = newGitHubClient().AssignIssue(gh.Repo, *ghPullRequest.Number, issue.Assignee)
 
 	if err != nil {
 		panic(err)
@@ -81,9 +78,7 @@ func (gh GitHub) CreatePullRequest(issue common.Issue, linkType string) *PullReq
 }
 
 func (gh GitHub) AssignPullRequestReviewer(pr *PullRequest, reviewer string) {
-	repo := versioncontrol.GetClient().Repo()
-
-	err := newGitHubClient().RequestReviewer(repo, pr.Number, reviewer)
+	err := newGitHubClient().RequestReviewer(gh.Repo, pr.Number, reviewer)
 
 	if err != nil {
 		panic(err)
@@ -91,9 +86,7 @@ func (gh GitHub) AssignPullRequestReviewer(pr *PullRequest, reviewer string) {
 }
 
 func (gh GitHub) MergePullRequest(pr *PullRequest, mergeMethod string) bool {
-	repo := versioncontrol.GetClient().Repo()
-
-	merged, err := newGitHubClient().MergePullRequest(repo, pr.Number, mergeMethod)
+	merged, err := newGitHubClient().MergePullRequest(gh.Repo, pr.Number, mergeMethod)
 
 	if err != nil {
 		panic(err)
