@@ -30,7 +30,7 @@ func TestGetCurrentUserLogin(t *testing.T) {
 
 		if test.result != "" {
 			user = &github.User{}
-			testutils.LoadFixture("testdata/github_user.json", user)
+			testutils.LoadFixture("testdata/github_user_v3.json", user)
 		}
 
 		mockService := &mocks.GitHubService{}
@@ -61,7 +61,7 @@ func TestGetUserRealName(t *testing.T) {
 
 		if test.result != "" {
 			user = &github.User{}
-			testutils.LoadFixture("testdata/github_user.json", user)
+			testutils.LoadFixture("testdata/github_user_v3.json", user)
 		}
 
 		mockService := &mocks.GitHubService{}
@@ -104,7 +104,7 @@ func TestGetIssues(t *testing.T) {
 		if test.result != nil {
 			ghIssues := make([]github.Issue, 0)
 			
-			testutils.LoadFixture("testdata/github_issues.json", &ghIssues)
+			testutils.LoadFixture("testdata/github_issues_v3.json", &ghIssues)
 			
 			for i := 0; i < len(ghIssues); i++ {
 				ghIssuesPtrs = append(ghIssuesPtrs, &ghIssues[i])
@@ -151,7 +151,7 @@ func TestGetIssue(t *testing.T) {
 		var ghIssue *github.Issue
 		
 		if test.result != nil {
-			testutils.LoadFixture("testdata/github_issue.json", &ghIssue)
+			testutils.LoadFixture("testdata/github_issue_v3.json", &ghIssue)
 		}
 
 		// TODO: set up a mock for the git helper so that we can stub

@@ -38,8 +38,7 @@ func toCommonIssue(ghIssue *github.Issue) common.Issue {
 }
 
 func (gh GitHub) getUser(login string) (*github.User, error) {
-	ghUser, err := gh.GitHubService.GetUser(login)
-	return ghUser, err
+	return gh.GitHubService.GetUser(login)
 }
 
 func (gh GitHub) GetCurrentUserLogin() (string, error) {
