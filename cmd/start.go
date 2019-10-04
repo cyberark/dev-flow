@@ -18,7 +18,9 @@ var startCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		issueKey := args[0]
 
-		it := issuetracking.GetClient()
+		vc := versioncontrol.GetClient()
+
+		it := issuetracking.GetClient(vc.Repo())
 		issue, err := it.GetIssue(issueKey)
 
 		if err != nil {
@@ -44,8 +46,6 @@ var startCmd = &cobra.Command{
 		if err != nil {
 			log.Println(err)
 		}
-
-		vc := versioncontrol.GetClient()
 
 		vc.CheckoutAndPull("master")
 

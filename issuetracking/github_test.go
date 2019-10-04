@@ -111,14 +111,16 @@ func TestGetIssues(t *testing.T) {
 			}
 		}
 
-		// TODO: set up a mock for the git helper so that we can stub
-		// repo info instead of using cyberark/dev-flow in the tests.
-		repo := versioncontrol.Git{}.Repo()
+		repo := common.Repo{
+			Owner: "test-owner",
+			Name: "test-name",
+		}
 		
 		mockService := &mocks.GitHubService{}
 		mockService.On("GetIssues", repo).Return(ghIssuesPtrs, test.err)
 		
 		client := issuetracking.GitHub{
+			Repo: repo,
 			GitHubService: mockService,
 		}
 
@@ -154,15 +156,17 @@ func TestGetIssue(t *testing.T) {
 			testutils.LoadFixture("testdata/github_issue_v3.json", &ghIssue)
 		}
 
-		// TODO: set up a mock for the git helper so that we can stub
-		// repo info instead of using cyberark/dev-flow in the tests.
-		repo := versioncontrol.Git{}.Repo()
+		repo := common.Repo{
+			Owner: "test-owner",
+			Name: "test-name",
+		}
 		issueNum := 1347
 		
 		mockService := &mocks.GitHubService{}
 		mockService.On("GetIssue", repo, issueNum).Return(ghIssue, test.err)
 		
 		client := issuetracking.GitHub{
+			Repo: repo,
 			GitHubService: mockService,
 		}
 
@@ -182,9 +186,10 @@ func TestAssignissue(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		// TODO: set up a mock for the git helper so that we can stub
-		// repo info instead of using cyberark/dev-flow in the tests.
-		repo := versioncontrol.Git{}.Repo()
+		repo := common.Repo{
+			Owner: "test-owner",
+			Name: "test-name",
+		}
 		issueNum := 123
 		login := "octocat"
 
@@ -192,6 +197,7 @@ func TestAssignissue(t *testing.T) {
 		mockService.On("AssignIssue", repo, issueNum, login).Return(test.err)
 
 		client := issuetracking.GitHub{
+			Repo: repo,
 			GitHubService: mockService,
 		}
 		
@@ -210,7 +216,10 @@ func TestAddIssueLabel(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		repo := versioncontrol.Git{}.Repo()
+		repo := common.Repo{
+			Owner: "test-owner",
+			Name: "test-name",
+		}
 		issueNum := 123
 		labelName := "test"
 
@@ -218,6 +227,7 @@ func TestAddIssueLabel(t *testing.T) {
 		mockService.On("AddLabelToIssue", repo, issueNum, labelName).Return(test.err)
 
 		client := issuetracking.GitHub{
+			Repo: repo,
 			GitHubService: mockService,
 		}
 		
@@ -236,7 +246,10 @@ func TestRemoveIssueLabel(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		repo := versioncontrol.Git{}.Repo()
+		repo := common.Repo{
+			Owner: "test-owner",
+			Name: "test-name",
+		}
 		issueNum := 123
 		labelName := "test"
 
@@ -244,6 +257,7 @@ func TestRemoveIssueLabel(t *testing.T) {
 		mockService.On("RemoveLabelForIssue", repo, issueNum, labelName).Return(test.err)
 
 		client := issuetracking.GitHub{
+			Repo: repo,
 			GitHubService: mockService,
 		}
 		

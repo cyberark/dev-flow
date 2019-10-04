@@ -7,10 +7,10 @@ import (
 
 	"github.com/cyberark/dev-flow/common"
 	"github.com/cyberark/dev-flow/service"
-	"github.com/cyberark/dev-flow/versioncontrol"
 )
 
 type GitHub struct {
+	Repo common.Repo
 	GitHubService service.GitHubService
 }
 
@@ -62,9 +62,7 @@ func (gh GitHub) GetUserRealName(login string) (string, error) {
 }
 
 func (gh GitHub) GetIssues() ([]common.Issue, error) {
-	repo := versioncontrol.Git{}.Repo()
-
-	ghIssues, err := gh.GitHubService.GetIssues(repo)
+	ghIssues, err := gh.GitHubService.GetIssues(gh.Repo)
 	
 	if err != nil {
 		return nil, err
@@ -81,15 +79,13 @@ func (gh GitHub) GetIssues() ([]common.Issue, error) {
 }
 
 func (gh GitHub) GetIssue(issueKey string) (*common.Issue, error) {
-	repo := versioncontrol.Git{}.Repo()
-
 	issueNum, err := strconv.Atoi(issueKey)
 
 	if err != nil {
 		return nil, err
 	}
 
-	ghIssue, err := gh.GitHubService.GetIssue(repo, issueNum)
+	ghIssue, err := gh.GitHubService.GetIssue(gh.Repo, issueNum)
 
 	if err != nil {
 		return nil, err
@@ -101,9 +97,7 @@ func (gh GitHub) GetIssue(issueKey string) (*common.Issue, error) {
 }
 
 func (gh GitHub) AssignIssue(issueNum int, login string) error {
-	repo := versioncontrol.Git{}.Repo()
-
-	err := gh.GitHubService.AssignIssue(repo, issueNum, login)
+	err := gh.GitHubService.AssignIssue(gh.Repo, issueNum, login)
 	
 	if err != nil {
 		return err
@@ -113,9 +107,7 @@ func (gh GitHub) AssignIssue(issueNum int, login string) error {
 }
 
 func (gh GitHub) AddIssueLabel(issueNum int, labelName string) error {
-	repo := versioncontrol.Git{}.Repo()
-
-	err := gh.GitHubService.AddLabelToIssue(repo, issueNum, labelName)
+	err := gh.GitHubService.AddLabelToIssue(gh.Repo, issueNum, labelName)
 	
 	if err != nil {
 		return err
@@ -125,9 +117,7 @@ func (gh GitHub) AddIssueLabel(issueNum int, labelName string) error {
 }
 
 func (gh GitHub) RemoveIssueLabel(issueNum int, labelName string) error {
-	repo := versioncontrol.Git{}.Repo()
-	
-	err := gh.GitHubService.RemoveLabelForIssue(repo, issueNum, labelName)
+	err := gh.GitHubService.RemoveLabelForIssue(gh.Repo, issueNum, labelName)
 
 	if err != nil {
 		return err

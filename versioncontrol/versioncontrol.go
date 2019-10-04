@@ -1,7 +1,11 @@
 package versioncontrol
 
+import (
+	"github.com/cyberark/dev-flow/common"
+)
+
 type VersionControlClient interface {
-	Repo() Repo
+	Repo() common.Repo
 	CurrentBranch() string
 	Pull()
 	CheckoutAndPull(string)
@@ -13,11 +17,6 @@ type VersionControlClient interface {
 
 func GetClient() VersionControlClient {
 	return Git{}
-}
-
-type Repo struct {
-	Owner string
-	Name string
 }
 
 type Branch struct {

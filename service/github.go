@@ -9,19 +9,19 @@ import (
 
 	"github.com/google/go-github/github"
 
-	"github.com/cyberark/dev-flow/versioncontrol"
+	"github.com/cyberark/dev-flow/common"
 )
 
 type GitHubService interface {
 	GetUser(string) (*github.User, error)
-	GetIssues(versioncontrol.Repo) ([]*github.Issue, error)
-	GetIssue(repo versioncontrol.Repo, issueNum int) (*github.Issue, error)
-	AssignIssue(repo versioncontrol.Repo, issueNum int, assigneeLogin string) (error)
-	GetLabel(repo versioncontrol.Repo, name string) (*github.Label, error)
-	AddLabelToIssue(repo versioncontrol.Repo, issueNum int, labelName string) (error)
-	RemoveLabelForIssue(repo versioncontrol.Repo, issueNum int, labelName string) (error)
-	GetPullRequests(repo versioncontrol.Repo, branchName string) ([]*github.PullRequest, error)
-	GetPullRequest(repo versioncontrol.Repo, pullRequestNum int) (*github.PullRequest, error)
+	GetIssues(common.Repo) ([]*github.Issue, error)
+	GetIssue(repo common.Repo, issueNum int) (*github.Issue, error)
+	AssignIssue(repo common.Repo, issueNum int, assigneeLogin string) (error)
+	GetLabel(repo common.Repo, name string) (*github.Label, error)
+	AddLabelToIssue(repo common.Repo, issueNum int, labelName string) (error)
+	RemoveLabelForIssue(repo common.Repo, issueNum int, labelName string) (error)
+	GetPullRequests(repo common.Repo, branchName string) ([]*github.PullRequest, error)
+	GetPullRequest(repo common.Repo, pullRequestNum int) (*github.PullRequest, error)
 }
 
 type GitHub struct{}
@@ -45,7 +45,7 @@ func (gh GitHub) GetUser(login string) (*github.User, error) {
 	return user, nil
 }
 
-func (gh GitHub) GetIssues(repo versioncontrol.Repo) ([]*github.Issue, error) {
+func (gh GitHub) GetIssues(repo common.Repo) ([]*github.Issue, error) {
 	issues, _, err := newClient().Issues.ListByRepo(
 		context.Background(),
 		repo.Owner,
@@ -60,7 +60,7 @@ func (gh GitHub) GetIssues(repo versioncontrol.Repo) ([]*github.Issue, error) {
 	return issues, nil
 }
 
-func (gh GitHub) GetIssue(repo versioncontrol.Repo, issueNum int) (*github.Issue, error) {
+func (gh GitHub) GetIssue(repo common.Repo, issueNum int) (*github.Issue, error) {
 	issue, _, err := newClient().Issues.Get(
 		context.Background(),
 		repo.Owner,
@@ -75,7 +75,7 @@ func (gh GitHub) GetIssue(repo versioncontrol.Repo, issueNum int) (*github.Issue
 	return issue, nil
 }
 
-func (gh GitHub) AssignIssue(repo versioncontrol.Repo, issueNum int, assigneeLogin string) (error) {
+func (gh GitHub) AssignIssue(repo common.Repo, issueNum int, assigneeLogin string) (error) {
 	_, _, err := newClient().Issues.AddAssignees(
 		context.Background(),
 		repo.Owner,
@@ -91,7 +91,7 @@ func (gh GitHub) AssignIssue(repo versioncontrol.Repo, issueNum int, assigneeLog
 	return nil
 }
 
-func (gh GitHub) GetLabel(repo versioncontrol.Repo, name string) (*github.Label, error) {
+func (gh GitHub) GetLabel(repo common.Repo, name string) (*github.Label, error) {
 	label, _, err := newClient().Issues.GetLabel(
 		context.Background(),
 		repo.Owner,
@@ -106,7 +106,7 @@ func (gh GitHub) GetLabel(repo versioncontrol.Repo, name string) (*github.Label,
 	return label, nil
 }
 
-func (gh GitHub) AddLabelToIssue(repo versioncontrol.Repo, issueNum int, labelName string) (error) {
+func (gh GitHub) AddLabelToIssue(repo common.Repo, issueNum int, labelName string) (error) {
 	_, _, err := newClient().Issues.AddLabelsToIssue(
 		context.Background(),
 		repo.Owner,
@@ -122,7 +122,7 @@ func (gh GitHub) AddLabelToIssue(repo versioncontrol.Repo, issueNum int, labelNa
 	return nil
 }
 
-func (gh GitHub) RemoveLabelForIssue(repo versioncontrol.Repo, issueNum int, labelName string) (error) {
+func (gh GitHub) RemoveLabelForIssue(repo common.Repo, issueNum int, labelName string) (error) {
 	_, err := newClient().Issues.RemoveLabelForIssue(
 		context.Background(),
 		repo.Owner,
@@ -138,7 +138,7 @@ func (gh GitHub) RemoveLabelForIssue(repo versioncontrol.Repo, issueNum int, lab
 	return nil
 }
 
-func (gh GitHub) GetPullRequests(repo versioncontrol.Repo, branchName string) ([]*github.PullRequest, error) {
+func (gh GitHub) GetPullRequests(repo common.Repo, branchName string) ([]*github.PullRequest, error) {
 	opts := &github.PullRequestListOptions{
 		State: "open",
 		Base:  "master",
@@ -159,7 +159,7 @@ func (gh GitHub) GetPullRequests(repo versioncontrol.Repo, branchName string) ([
 	return pullRequests, nil
 }
 
-func (gh GitHub) GetPullRequest(repo versioncontrol.Repo, pullRequestNum int) (*github.PullRequest, error) {
+func (gh GitHub) GetPullRequest(repo common.Repo, pullRequestNum int) (*github.PullRequest, error) {
 	pullRequest, _, err := newClient().PullRequests.Get(
 		context.Background(),
 		repo.Owner,
@@ -174,7 +174,7 @@ func (gh GitHub) GetPullRequest(repo versioncontrol.Repo, pullRequestNum int) (*
 	return pullRequest, nil
 }
 
-func (gh GitHub) CreatePullRequest(repo versioncontrol.Repo, newPullRequest *github.NewPullRequest) (*github.PullRequest, error) {
+func (gh GitHub) CreatePullRequest(repo common.Repo, newPullRequest *github.NewPullRequest) (*github.PullRequest, error) {
 	pullRequest, _, err := newClient().PullRequests.Create(
 		context.Background(),
 		repo.Owner,
@@ -189,7 +189,7 @@ func (gh GitHub) CreatePullRequest(repo versioncontrol.Repo, newPullRequest *git
 	return pullRequest, nil
 }
 
-func (gh GitHub) RequestReviewer(repo versioncontrol.Repo, pullRequestNum int, reviewerLogin string) (error) {
+func (gh GitHub) RequestReviewer(repo common.Repo, pullRequestNum int, reviewerLogin string) (error) {
 	reviewersRequest := github.ReviewersRequest{
 		Reviewers: []string{reviewerLogin},
 	}
@@ -209,7 +209,7 @@ func (gh GitHub) RequestReviewer(repo versioncontrol.Repo, pullRequestNum int, r
 	return nil
 }
 
-func (gh GitHub) MergePullRequest(repo versioncontrol.Repo, pullRequestNum int, mergeMethod string) (bool, error) {
+func (gh GitHub) MergePullRequest(repo common.Repo, pullRequestNum int, mergeMethod string) (bool, error) {
 	pullRequestOptions := &github.PullRequestOptions{
 		MergeMethod: mergeMethod,
 	}

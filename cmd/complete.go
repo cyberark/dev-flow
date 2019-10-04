@@ -48,7 +48,7 @@ var completeCmd = &cobra.Command{
 
 		success := scm.MergePullRequest(pr, MergeMethod)
 
-		it := issuetracking.GetClient()
+		it := issuetracking.GetClient(vc.Repo())
 		issueKey := issuetracking.GetIssueKeyFromBranchName(branchName)
 		issue, err := it.GetIssue(issueKey)
 

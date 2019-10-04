@@ -25,7 +25,8 @@ var pullrequestCmd = &cobra.Command{
 			[]string{ "close", "connect" },
 		)
 		
-		branchName := versioncontrol.GetClient().CurrentBranch()
+		vc := versioncontrol.GetClient()
+		branchName := vc.CurrentBranch()
 
 		scm := scm.GetClient()
 		pr := scm.GetPullRequest(branchName)
@@ -34,7 +35,7 @@ var pullrequestCmd = &cobra.Command{
 			fmt.Println("Pull request already exists for branch", branchName)
 		} else {
 			issueKey := issuetracking.GetIssueKeyFromBranchName(branchName)
-			issue, err := issuetracking.GetClient().GetIssue(issueKey)
+			issue, err := issuetracking.GetClient(vc.Repo()).GetIssue(issueKey)
 
 			if err != nil {
 				log.Fatalln(err)

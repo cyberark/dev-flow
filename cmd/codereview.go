@@ -30,9 +30,10 @@ var codereviewCmd = &cobra.Command{
 		
 		reviewer := args[0]
 
-		branchName := versioncontrol.GetClient().CurrentBranch()
+		vc := versioncontrol.GetClient()
+		branchName := vc.CurrentBranch()
 
-		it := issuetracking.GetClient()
+		it := issuetracking.GetClient(vc.Repo())
 		issueKey := issuetracking.GetIssueKeyFromBranchName(branchName)
 		issue, err := it.GetIssue(issueKey)
 

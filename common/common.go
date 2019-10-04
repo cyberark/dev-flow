@@ -39,3 +39,8 @@ func (issue Issue) HasLabel(label string) bool {
 	}
 	return false
 }
+
+type Repo struct {
+	Owner string
+	Name string
+}

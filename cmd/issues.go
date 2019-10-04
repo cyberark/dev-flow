@@ -8,6 +8,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/cyberark/dev-flow/issuetracking"
+	"github.com/cyberark/dev-flow/versioncontrol"
 )
 
 var issuesCmd = &cobra.Command{
@@ -15,7 +16,9 @@ var issuesCmd = &cobra.Command{
 	Short: "Lists open, unassigned issues on the current repository.",
 	Long:  "Lists open, unassigned issues on the current repository.",
 	Run: func(cmd *cobra.Command, args []string) {
-		it := issuetracking.GetClient()
+		vc := versioncontrol.GetClient()
+		
+		it := issuetracking.GetClient(vc.Repo())
 
 		issues, err := it.GetIssues()
 

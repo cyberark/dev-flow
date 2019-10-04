@@ -7,6 +7,7 @@ import (
 
 	"github.com/cyberark/dev-flow/issuetracking"
 	"github.com/cyberark/dev-flow/util"
+	"github.com/cyberark/dev-flow/versioncontrol"
 )
 
 var issueCmd = &cobra.Command{
@@ -16,8 +17,10 @@ var issueCmd = &cobra.Command{
 	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		issueKey := args[0]
+
+		vc := versioncontrol.GetClient()
 		
-		it := issuetracking.GetClient()
+		it := issuetracking.GetClient(vc.Repo())
 		issue, err := it.GetIssue(issueKey)
 
 		if err != nil {

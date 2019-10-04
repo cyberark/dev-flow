@@ -20,9 +20,11 @@ var labelCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		label := args[0]
 
+		vc := versioncontrol.GetClient()
+		
 		if IssueKey == "" {
 			fmt.Println("No issue key provided, retrieving from branch.")
-			branchName := versioncontrol.GetClient().CurrentBranch()
+			branchName := vc.CurrentBranch()
 			IssueKey = issuetracking.GetIssueKeyFromBranchName(branchName)
 		}
 
@@ -30,7 +32,7 @@ var labelCmd = &cobra.Command{
 			log.Fatalln("No issue key provided")
 		}
 		
-		it := issuetracking.GetClient()
+		it := issuetracking.GetClient(vc.Repo())
 		issue, err := it.GetIssue(IssueKey)
 
 		if err != nil {

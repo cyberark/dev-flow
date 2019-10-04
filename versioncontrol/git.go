@@ -2,9 +2,10 @@ package versioncontrol
 
 import (
 	"fmt"
-
 	"os/exec"
 	"strings"
+
+	"github.com/cyberark/dev-flow/common"
 )
 
 type Git struct{}
@@ -25,11 +26,11 @@ func (git Git) runCommand(cmd string, print bool) string {
 	return outputStr
 }
 
-func (git Git) Repo() Repo {
+func (git Git) Repo() common.Repo {
 	slug := git.runCommand("git remote show origin -n | grep h.URL | sed 's/.*://;s/.git$//'", false)
 	slugSplit := strings.Split(strings.TrimSpace(slug), "/")
 
-	repo := Repo {
+	repo := common.Repo {
 		Owner: slugSplit[0],
 		Name: slugSplit[1],
 	}

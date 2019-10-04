@@ -17,8 +17,9 @@ type IssueTrackingClient interface {
 	RemoveIssueLabel(int, string) error
 }
 
-func GetClient() IssueTrackingClient {
+func GetClient(repo common.Repo) IssueTrackingClient {
 	return GitHub{
+		Repo: repo,
 		GitHubService: service.GitHub{},
 	}
 }
