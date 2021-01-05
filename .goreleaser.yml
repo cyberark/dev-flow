@@ -38,7 +38,7 @@ brew:
   test: |
     system "#{bin}/dev-flow", "-h"
 
-  github:
+  tap:
     owner: cyberark
     name: homebrew-tools
   skip_upload: true
